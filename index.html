@@ -1,50 +1,1030 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>PeopleTalk — Wine Gallery</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{margin:0;font-family:Helvetica,Arial,sans-serif;background:#faf7f2;color:#1f1f1f}
-header{padding:24px 32px;border-bottom:1px solid #e6e1d9}
-h1{margin:0;font-size:28px;font-weight:500}
-.subtitle{margin-top:4px;font-size:13px;color:#777}
-.controls{padding:16px 32px;display:flex;gap:12px;flex-wrap:wrap}
-button{padding:6px 12px;border-radius:14px;border:1px solid #c7a17a;background:#fff;cursor:pointer}
-button.active{background:#c7a17a;color:#fff}
-main{padding:32px}
-.wine-card{background:#fff;border:1px solid #e6e1d9;border-radius:12px;padding:16px;max-width:320px}
-.wine-name{font-size:16px;font-weight:500}
-.wine-meta{font-size:13px;color:#555;margin-top:4px}
-.wine-pairing{font-size:13px;margin-top:10px}
-.wine-price{margin-top:12px;font-size:14px;font-weight:500}
-footer{padding:24px;text-align:center;font-size:12px;color:#999}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#F6F1EA" />
+  <title>PeopleTalk — Wine Gallery</title>
+
+  <style>
+    :root{
+      --bg:#F6F1EA;          /* off-white */
+      --ink:#1F1F1F;         /* graphite */
+      --muted:#6B6B6B;
+      --card:#FFFDF9;
+      --stroke:rgba(31,31,31,.14);
+      --shadow: 0 12px 32px rgba(0,0,0,.08);
+      --accent:#B26A4A;      /* terracotta */
+      --accent2:#2E5B6B;     /* cool accent for focus */
+      --radius:16px;
+      --radius2:22px;
+      --max:1100px;
+      --ui: 12px;
+      --pad: 18px;
+      --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      touch-action: manipulation;
+    }
+    a{ color:inherit; }
+    button, input, select{
+      font: inherit;
+      color: inherit;
+    }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 26px 16px 80px;
+    }
+
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    h1{
+      font-size: 32px;
+      line-height:1.1;
+      margin:0;
+      letter-spacing:-0.4px;
+    }
+    .sub{
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .seg{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.5);
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pill[aria-pressed="true"]{
+      border-color: rgba(178,106,74,.55);
+      background: rgba(178,106,74,.14);
+    }
+    .pill:active{ transform: translateY(1px); }
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px;
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.45);
+      margin: 14px 0 18px;
+    }
+
+    .leftControls, .rightControls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .search{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.7);
+      min-width: 240px;
+    }
+    .search input{
+      border:none;
+      outline:none;
+      background: transparent;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    select{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.7);
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .status{
+      font-size: 13px;
+      color: var(--muted);
+      margin: 8px 0 10px;
+    }
+
+    /* LIST */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .wineCard{
+      grid-column: span 6;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display:flex;
+      gap: 14px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+    }
+    .wineCard:active{ transform: translateY(1px); }
+    .thumb{
+      width: 78px;
+      min-width:78px;
+      height: 118px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(178,106,74,.12), rgba(46,91,107,.08));
+      border: 1px solid var(--stroke);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      transform: scale(1.02);
+    }
+    .meta{
+      flex:1;
+      min-width: 0;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .name{
+      font-weight: 650;
+      font-size: 16px;
+      line-height:1.25;
+      margin:0;
+    }
+    .line{
+      font-size: 13px;
+      color: var(--muted);
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+    }
+    .pair{
+      font-size: 13px;
+      line-height:1.35;
+    }
+    .price{
+      margin-top: 2px;
+      font-weight: 650;
+      font-size: 14px;
+    }
+    .tagRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 2px;
+    }
+    .tag{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius:999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.65);
+      color: var(--ink);
+    }
+    .tag.accent{
+      border-color: rgba(178,106,74,.45);
+      background: rgba(178,106,74,.12);
+      color: var(--ink);
+    }
+
+    /* BOOK */
+    .bookWrap{
+      border: 1px solid var(--stroke);
+      border-radius: 28px;
+      background: rgba(255,255,255,.45);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .bookTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--stroke);
+      background: rgba(255,255,255,.5);
+    }
+    .bookNav{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .btn{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.65);
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn.primary{
+      border-color: rgba(178,106,74,.55);
+      background: rgba(178,106,74,.14);
+    }
+    .btn:active{ transform: translateY(1px); }
+    .pageInfo{
+      font-size: 13px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+
+    .spread{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 520px;
+    }
+    .page{
+      padding: 18px;
+      position:relative;
+      background:
+        radial-gradient(1200px 800px at 40% 10%, rgba(178,106,74,.08), transparent 55%),
+        radial-gradient(900px 600px at 80% 90%, rgba(46,91,107,.06), transparent 60%),
+        rgba(255,255,255,.25);
+    }
+    .page + .page{
+      border-left: 1px solid var(--stroke);
+    }
+
+    .sectionIntro{
+      margin: 0 0 12px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.58);
+    }
+    .sectionIntro .h{
+      font-weight: 750;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin:0 0 6px;
+      color: var(--ink);
+    }
+    .sectionIntro .p{
+      margin:0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.35;
+    }
+
+    .bookList{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .bookItem{
+      display:flex;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.62);
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+    }
+    .bookItem:active{ transform: translateY(1px); }
+    .bookItem .thumb{
+      width: 70px;
+      min-width:70px;
+      height: 110px;
+      border-radius: 14px;
+    }
+
+    /* MODAL (wine detail) */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.40);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      z-index: 9999;
+    }
+    .overlay[aria-hidden="false"]{ display:flex; }
+
+    .modal{
+      width: min(920px, 100%);
+      max-height: min(760px, 92vh);
+      overflow:auto;
+      border-radius: 26px;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      box-shadow: 0 30px 80px rgba(0,0,0,.25);
+    }
+    .modalTop{
+      position: sticky;
+      top:0;
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--stroke);
+      padding: 12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      z-index: 2;
+    }
+    .modalTop .close{
+      border:none;
+      background: rgba(178,106,74,.14);
+      border: 1px solid rgba(178,106,74,.45);
+      padding: 10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+    }
+
+    .modalBody{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: 14px;
+      padding: 14px;
+    }
+    .hero{
+      border-radius: 22px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(178,106,74,.10), rgba(46,91,107,.08));
+      min-height: 420px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      padding: 12px;
+    }
+    .hero img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: scale(1.02);
+    }
+    .detail h2{
+      margin: 6px 0 6px;
+      font-size: 22px;
+      line-height:1.2;
+      letter-spacing:-.2px;
+    }
+    .detail .small{
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap: 8px 12px;
+      padding: 12px;
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      background: rgba(255,255,255,.55);
+      margin-bottom: 12px;
+    }
+    .k{ font-weight:650; font-size:13px; }
+    .v{ font-size:13px; color: var(--ink); }
+    .v.muted{ color: var(--muted); }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .wineCard{ grid-column: span 12; }
+      .modalBody{ grid-template-columns: 1fr; }
+      .hero{ min-height: 320px; }
+      .spread{ grid-template-columns: 1fr; }
+      .page + .page{ border-left:none; border-top:1px solid var(--stroke); }
+      .search{ min-width: 180px; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>PeopleTalk — Wine Gallery</h1>
+        <div class="sub">MVP prototype · Live from Google Sheets (CSV)</div>
+      </div>
 
-<header>
-<h1>PeopleTalk — Wine Gallery</h1>
-<div class="subtitle">MVP prototype</div>
-</header>
+      <div class="seg" role="group" aria-label="View mode">
+        <button id="btnList" class="pill" aria-pressed="true" type="button">List</button>
+        <button id="btnBook" class="pill" aria-pressed="false" type="button">Book</button>
+      </div>
+    </header>
 
-<div class="controls">
-<button class="active">List</button>
-<button>Book</button>
-</div>
+    <div class="toolbar">
+      <div class="leftControls" role="group" aria-label="Filters">
+        <button class="pill" data-section="All" aria-pressed="true" type="button">All</button>
+        <button class="pill" data-section="Sparkling" aria-pressed="false" type="button">Sparkling</button>
+        <button class="pill" data-section="White" aria-pressed="false" type="button">White</button>
+        <button class="pill" data-section="Rosé" aria-pressed="false" type="button">Rosé</button>
+        <button class="pill" data-section="Red" aria-pressed="false" type="button">Red</button>
+      </div>
 
-<main>
-<div class="wine-card">
-<div class="wine-name">Bortolomiol “Prior” Prosecco Superiore Brut</div>
-<div class="wine-meta">Glera · Veneto, Italy</div>
-<div class="wine-pairing">PeopleTalk: House‑Marinated Olives<br>World: Prosciutto e Melone</div>
-<div class="wine-price">$15 / $54</div>
-</div>
-</main>
+      <div class="rightControls">
+        <div class="search" role="search">
+          <span style="font-size:14px;color:var(--muted)">🔎</span>
+          <input id="q" type="search" placeholder="Search name / region / grape" autocomplete="off" />
+        </div>
 
-<footer>
-PeopleTalk Wine Gallery · Ready file
-</footer>
+        <select id="sort" aria-label="Sort">
+          <option value="curated">Curated order</option>
+          <option value="glass_asc">Price (glass) ↑</option>
+          <option value="glass_desc">Price (glass) ↓</option>
+          <option value="name_asc">Name A–Z</option>
+          <option value="region_asc">Region A–Z</option>
+        </select>
+      </div>
+    </div>
 
+    <div id="status" class="status">Loading…</div>
+
+    <!-- LIST -->
+    <div id="listView" class="grid" aria-label="Wine list"></div>
+
+    <!-- BOOK -->
+    <div id="bookView" class="bookWrap" style="display:none" aria-label="Book mode">
+      <div class="bookTop">
+        <div class="bookNav">
+          <button id="prev" class="btn" type="button">← Prev</button>
+          <button id="next" class="btn primary" type="button">Next →</button>
+          <button id="toc" class="btn" type="button">Contents</button>
+        </div>
+        <div id="pageInfo" class="pageInfo">Page 1 / 1</div>
+      </div>
+      <div class="spread">
+        <div id="pageL" class="page"></div>
+        <div id="pageR" class="page"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Wine details">
+      <div class="modalTop">
+        <div style="font-weight:700">Wine card</div>
+        <button id="closeModal" class="close" type="button">Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="hero"><img id="modalImg" alt="Bottle" /></div>
+        <div class="detail">
+          <h2 id="modalTitle">—</h2>
+          <div id="modalSub" class="small">—</div>
+
+          <div class="kv">
+            <div class="k">PeopleTalk:</div><div id="mPT" class="v muted">—</div>
+            <div class="k">World:</div><div id="mWorld" class="v muted">—</div>
+            <div class="k">Price:</div><div id="mPrice" class="v">—</div>
+            <div class="k">Producer:</div><div id="mProducer" class="v muted">—</div>
+            <div class="k">Grape:</div><div id="mGrape" class="v muted">—</div>
+            <div class="k">Vintage:</div><div id="mVintage" class="v muted">—</div>
+          </div>
+
+          <div class="tagRow">
+            <span id="mSection" class="tag accent">—</span>
+            <span id="mCountry" class="tag">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  // ===== CONFIG =====
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc7yfiUN3Wgz9vCWrKVJksRoQ6EFYzDq6P40HaN1v2hmhk0nKicji-UZYZyd7LF2-lcSSU264vG53f/pub?gid=178668445&single=true&output=csv";
+
+  // If bottle_img is empty -> hide whole wine (your choice C)
+  const HIDE_IF_NO_IMAGE = true;
+
+  // Book Mode: 2–3 wines per spread (we’ll do 3 = magazine-like)
+  const BOOK_WINES_PER_SPREAD = 3;
+
+  // Section intros (1–2 lines)
+  const SECTION_INTRO = {
+    "Sparkling": "Bright, celebratory, refreshing. Perfect to start.",
+    "White": "Fresh, aromatic, food-friendly. From crisp to creamy.",
+    "Rosé": "Light, elegant, effortless. Sunshine in a glass.",
+    "Red": "From juicy to structured. Comfort + depth."
+  };
+
+  // ===== DOM =====
+  const statusEl = document.getElementById('status');
+  const listView = document.getElementById('listView');
+  const bookView = document.getElementById('bookView');
+
+  const btnList = document.getElementById('btnList');
+  const btnBook = document.getElementById('btnBook');
+
+  const q = document.getElementById('q');
+  const sort = document.getElementById('sort');
+
+  const overlay = document.getElementById('overlay');
+  const closeModal = document.getElementById('closeModal');
+  const modalImg = document.getElementById('modalImg');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalSub = document.getElementById('modalSub');
+  const mPT = document.getElementById('mPT');
+  const mWorld = document.getElementById('mWorld');
+  const mPrice = document.getElementById('mPrice');
+  const mProducer = document.getElementById('mProducer');
+  const mGrape = document.getElementById('mGrape');
+  const mVintage = document.getElementById('mVintage');
+  const mSection = document.getElementById('mSection');
+  const mCountry = document.getElementById('mCountry');
+
+  const pageL = document.getElementById('pageL');
+  const pageR = document.getElementById('pageR');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const toc = document.getElementById('toc');
+  const pageInfo = document.getElementById('pageInfo');
+
+  const sectionPills = Array.from(document.querySelectorAll('[data-section]'));
+
+  // ===== STATE =====
+  let all = [];
+  let viewMode = 'list'; // list | book
+  let activeSection = 'All';
+  let bookPages = []; // array of spreads: {section, items[]}
+  let bookIndex = 0;
+
+  // ===== UTILS =====
+  const norm = (s) => (s ?? '').toString().trim();
+  const lower = (s) => norm(s).toLowerCase();
+
+  // basic CSV parser with quotes
+  function parseCSV(text){
+    const rows = [];
+    let cur = [], val = "", inQuotes = false;
+    for(let i=0;i<text.length;i++){
+      const ch = text[i];
+      const next = text[i+1];
+      if(ch === '"'){
+        if(inQuotes && next === '"'){ val += '"'; i++; }
+        else inQuotes = !inQuotes;
+      } else if(ch === ',' && !inQuotes){
+        cur.push(val); val = "";
+      } else if((ch === '\n' || ch === '\r') && !inQuotes){
+        if(ch === '\r' && next === '\n') i++;
+        cur.push(val);
+        if(cur.some(x => x !== "")) rows.push(cur);
+        cur = []; val = "";
+      } else {
+        val += ch;
+      }
+    }
+    cur.push(val);
+    if(cur.some(x => x !== "")) rows.push(cur);
+
+    const header = rows.shift().map(h => lower(h));
+    return rows.map(r => {
+      const obj = {};
+      header.forEach((h, idx) => obj[h] = r[idx] ?? "");
+      return obj;
+    });
+  }
+
+  function toMoney(x){
+    const n = Number(x);
+    if(!Number.isFinite(n) || n<=0) return "";
+    return "$" + n.toFixed(0);
+  }
+
+  function visibleYes(row){
+    const v = lower(row.visible);
+    return (v === "true" || v === "yes" || v === "1");
+  }
+
+  function cleanSection(s){
+    // normalize your sections to Sparkling/White/Rosé/Red
+    const x = norm(s);
+    const lx = lower(x);
+    if(lx.includes("spark")) return "Sparkling";
+    if(lx.includes("rose") || x.includes("Rosé")) return "Rosé";
+    if(lx.includes("white")) return "White";
+    if(lx.includes("red")) return "Red";
+    return x || "Other";
+  }
+
+  function rowToWine(row){
+    const wine = {
+      id: norm(row.id),
+      section: cleanSection(row.section),
+      name: norm(row.name),
+      producer: norm(row.producer),
+      region: norm(row.region),
+      country: norm(row.country),
+      vintage: norm(row.vintage),
+      btg: norm(row.btg_price || row.btg || row.glass_price),
+      bottle: norm(row.bottle_price || row.bottle),
+      pairingPT: norm(row.pairing_peopletalk),
+      pairingWorld: norm(row.pairing_world_easy),
+      order: Number(row.order || 9999),
+      bottleImg: norm(row.bottle_img),
+      visible: visibleYes(row),
+      grape: norm(row.grape || row.varietal || row.variety) // if you add later
+    };
+    return wine;
+  }
+
+  function filterWines(){
+    let items = all.slice();
+
+    // strict hide: no image => removed
+    if(HIDE_IF_NO_IMAGE){
+      items = items.filter(w => norm(w.bottleImg) !== "");
+    }
+
+    // visible
+    items = items.filter(w => w.visible);
+
+    // section
+    if(activeSection !== "All"){
+      items = items.filter(w => w.section === activeSection);
+    }
+
+    // search
+    const qq = lower(q.value);
+    if(qq){
+      items = items.filter(w => {
+        const hay = lower([w.name, w.region, w.country, w.producer, w.grape].join(" "));
+        return hay.includes(qq);
+      });
+    }
+
+    // sort
+    const s = sort.value;
+    const byName = (a,b) => a.name.localeCompare(b.name);
+    const byRegion = (a,b) => a.region.localeCompare(b.region);
+    const byCurated = (a,b) => (a.order - b.order) || byName(a,b);
+    const byGlassAsc = (a,b) => (Number(a.btg||9999)-Number(b.btg||9999)) || byCurated(a,b);
+    const byGlassDesc = (a,b) => (Number(b.btg||0)-Number(a.btg||0)) || byCurated(a,b);
+
+    if(s === "name_asc") items.sort(byName);
+    else if(s === "region_asc") items.sort(byRegion);
+    else if(s === "glass_asc") items.sort(byGlassAsc);
+    else if(s === "glass_desc") items.sort(byGlassDesc);
+    else items.sort(byCurated);
+
+    return items;
+  }
+
+  function openModal(w){
+    modalTitle.textContent = w.name || "—";
+    const subParts = [];
+    if(w.grape) subParts.push(w.grape);
+    const loc = [w.region, w.country].filter(Boolean).join(", ");
+    if(loc) subParts.push(loc);
+    if(w.vintage) subParts.push(w.vintage);
+    modalSub.textContent = subParts.join(" · ") || "—";
+
+    mPT.textContent = w.pairingPT ? w.pairingPT : "—";
+    mWorld.textContent = w.pairingWorld ? w.pairingWorld : "—";
+
+    const g = toMoney(w.btg);
+    const b = toMoney(w.bottle);
+    mPrice.textContent = (g && b) ? `${g} / ${b}` : (g || b || "—");
+
+    mProducer.textContent = w.producer || "—";
+    mGrape.textContent = w.grape || "—";
+    mVintage.textContent = w.vintage || "—";
+    mSection.textContent = w.section || "—";
+    mCountry.textContent = w.country || "—";
+
+    modalImg.src = w.bottleImg || "";
+    modalImg.alt = w.name ? (w.name + " bottle") : "Bottle";
+    modalImg.onerror = () => { modalImg.src = ""; };
+
+    overlay.setAttribute("aria-hidden","false");
+  }
+
+  function closeModalFn(){
+    overlay.setAttribute("aria-hidden","true");
+  }
+
+  // ===== RENDER =====
+  function renderList(items){
+    listView.innerHTML = "";
+    if(!items.length){
+      listView.innerHTML = `<div style="grid-column:span 12; padding:18px; color:var(--muted);">
+        No wines match your filters.
+      </div>`;
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+
+    for(const w of items){
+      const card = document.createElement("div");
+      card.className = "wineCard";
+      card.setAttribute("role","button");
+      card.tabIndex = 0;
+
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.src = w.bottleImg || "";
+      img.alt = w.name ? (w.name + " bottle") : "Bottle";
+      img.onerror = () => { img.remove(); };
+      thumb.appendChild(img);
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const name = document.createElement("p");
+      name.className = "name";
+      name.textContent = w.name || "—";
+
+      // List mode card requirements: Name, grape, region/country, price
+      const line = document.createElement("div");
+      line.className = "line";
+      const grape = w.grape ? w.grape : "";
+      const loc = [w.region, w.country].filter(Boolean).join(", ");
+      const lineText = [grape, loc].filter(Boolean).join(" · ");
+      line.textContent = lineText || loc || "—";
+
+      // per your rule: pairings first, then price
+      const pair = document.createElement("div");
+      pair.className = "pair";
+      pair.innerHTML = `
+        <div><strong>PeopleTalk:</strong> ${w.pairingPT ? escapeHtml(w.pairingPT) : "—"}</div>
+        <div><strong>World:</strong> ${w.pairingWorld ? escapeHtml(w.pairingWorld) : "—"}</div>
+      `;
+
+      const price = document.createElement("div");
+      price.className = "price";
+      const g = toMoney(w.btg);
+      const b = toMoney(w.bottle);
+      price.textContent = (g && b) ? `${g} / ${b}` : (g || b || "");
+
+      const tags = document.createElement("div");
+      tags.className = "tagRow";
+      tags.innerHTML = `
+        <span class="tag accent">${escapeHtml(w.section || "Wine")}</span>
+        <span class="tag">${escapeHtml(w.country || "")}</span>
+      `;
+
+      meta.appendChild(name);
+      meta.appendChild(line);
+      meta.appendChild(pair);
+      meta.appendChild(price);
+      meta.appendChild(tags);
+
+      card.appendChild(thumb);
+      card.appendChild(meta);
+
+      const open = () => openModal(w);
+      card.addEventListener("click", open, {passive:true});
+      card.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " ") open();
+      });
+
+      frag.appendChild(card);
+    }
+
+    listView.appendChild(frag);
+  }
+
+  function buildBookPages(items){
+    // Group by section in curated order, then make spreads with 3 wines each,
+    // each spread remembers its section for intro text.
+    const order = ["Sparkling","White","Rosé","Red"];
+    const groups = {};
+    for(const s of order) groups[s] = [];
+    for(const w of items){
+      if(!groups[w.section]) groups[w.section] = [];
+      groups[w.section].push(w);
+    }
+
+    const spreads = [];
+    for(const s of Object.keys(groups)){
+      const arr = groups[s];
+      if(!arr.length) continue;
+
+      // chunk
+      for(let i=0;i<arr.length;i+=BOOK_WINES_PER_SPREAD){
+        spreads.push({ section:s, items: arr.slice(i, i+BOOK_WINES_PER_SPREAD) });
+      }
+    }
+    return spreads;
+  }
+
+  function renderBook(){
+    const items = filterWines(); // same filters/search/sort as list
+    bookPages = buildBookPages(items);
+    bookIndex = Math.min(bookIndex, Math.max(0, bookPages.length-1));
+    if(bookPages.length === 0){
+      pageL.innerHTML = `<div style="color:var(--muted); padding:12px;">No wines in Book mode for current filters.</div>`;
+      pageR.innerHTML = "";
+      pageInfo.textContent = "Page 0 / 0";
+      return;
+    }
+    pageInfo.textContent = `Page ${bookIndex+1} / ${bookPages.length}`;
+
+    const spread = bookPages[bookIndex];
+    const leftItems = spread.items.slice(0, Math.ceil(spread.items.length/2));
+    const rightItems = spread.items.slice(Math.ceil(spread.items.length/2));
+
+    pageL.innerHTML = renderBookPage(spread.section, leftItems);
+    pageR.innerHTML = renderBookPage(spread.section, rightItems);
+
+    // bind click handlers inside pages
+    pageL.querySelectorAll("[data-wid]").forEach(el => {
+      const id = el.getAttribute("data-wid");
+      el.addEventListener("click", () => {
+        const w = all.find(x => x.id === id);
+        if(w) openModal(w);
+      }, {passive:true});
+    });
+    pageR.querySelectorAll("[data-wid]").forEach(el => {
+      const id = el.getAttribute("data-wid");
+      el.addEventListener("click", () => {
+        const w = all.find(x => x.id === id);
+        if(w) openModal(w);
+      }, {passive:true});
+    });
+  }
+
+  function renderBookPage(section, items){
+    const intro = SECTION_INTRO[section] || "";
+    const introHtml = `
+      <div class="sectionIntro">
+        <p class="h">${escapeHtml(section)} wines</p>
+        <p class="p">${escapeHtml(intro)}</p>
+      </div>
+    `;
+
+    const listHtml = items.map(w => `
+      <div class="bookItem" role="button" tabindex="0" data-wid="${escapeAttr(w.id)}">
+        <div class="thumb">
+          ${w.bottleImg ? `<img loading="lazy" src="${escapeAttr(w.bottleImg)}" alt="${escapeAttr(w.name)} bottle" onerror="this.remove()">` : ""}
+        </div>
+        <div class="meta">
+          <p class="name">${escapeHtml(w.name || "—")}</p>
+          <div class="line">${escapeHtml([w.grape, [w.region,w.country].filter(Boolean).join(", ")].filter(Boolean).join(" · ") || "—")}</div>
+          <div class="pair">
+            <div><strong>PeopleTalk:</strong> ${escapeHtml(w.pairingPT || "—")}</div>
+            <div><strong>World:</strong> ${escapeHtml(w.pairingWorld || "—")}</div>
+          </div>
+          <div class="price">${escapeHtml(((toMoney(w.btg) && toMoney(w.bottle)) ? `${toMoney(w.btg)} / ${toMoney(w.bottle)}` : (toMoney(w.btg) || toMoney(w.bottle) || "")))}</div>
+        </div>
+      </div>
+    `).join("");
+
+    return `${introHtml}<div class="bookList">${listHtml}</div>`;
+  }
+
+  function setMode(mode){
+    viewMode = mode;
+    const isList = mode === "list";
+
+    btnList.setAttribute("aria-pressed", String(isList));
+    btnBook.setAttribute("aria-pressed", String(!isList));
+
+    listView.style.display = isList ? "" : "none";
+    bookView.style.display = isList ? "none" : "";
+
+    // refresh current view
+    refresh();
+  }
+
+  function refresh(){
+    const items = filterWines();
+    statusEl.textContent = `${items.length} wines · section: ${activeSection}`;
+    if(viewMode === "list") renderList(items);
+    else renderBook();
+  }
+
+  // safe HTML
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function escapeAttr(s){ return escapeHtml(s).replaceAll("`","&#096;"); }
+
+  // ===== EVENTS =====
+  btnList.addEventListener("click", () => setMode("list"), {passive:true});
+  btnBook.addEventListener("click", () => setMode("book"), {passive:true});
+
+  sectionPills.forEach(p => {
+    p.addEventListener("click", () => {
+      sectionPills.forEach(x => x.setAttribute("aria-pressed","false"));
+      p.setAttribute("aria-pressed","true");
+      activeSection = p.getAttribute("data-section");
+      bookIndex = 0;
+      refresh();
+    }, {passive:true});
+  });
+
+  q.addEventListener("input", () => { bookIndex = 0; refresh(); });
+  sort.addEventListener("change", () => { bookIndex = 0; refresh(); });
+
+  prev.addEventListener("click", () => {
+    if(bookIndex > 0){ bookIndex--; renderBook(); }
+  }, {passive:true});
+  next.addEventListener("click", () => {
+    if(bookIndex < bookPages.length-1){ bookIndex++; renderBook(); }
+  }, {passive:true});
+
+  toc.addEventListener("click", () => {
+    // quick TOC: reset filters to All + curated + book start
+    activeSection = "All";
+    sectionPills.forEach(x => x.setAttribute("aria-pressed", x.getAttribute("data-section")==="All" ? "true" : "false"));
+    q.value = "";
+    sort.value = "curated";
+    bookIndex = 0;
+    renderBook();
+  }, {passive:true});
+
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) closeModalFn();
+  });
+  closeModal.addEventListener("click", closeModalFn, {passive:true});
+  window.addEventListener("keydown", (e) => {
+    if(e.key === "Escape") closeModalFn();
+  });
+
+  // ===== LOAD =====
+  async function load(){
+    statusEl.textContent = "Loading from Google Sheets…";
+    try{
+      const res = await fetch(CSV_URL, {cache:"no-store"});
+      if(!res.ok) throw new Error("CSV fetch failed: " + res.status);
+      const text = await res.text();
+
+      const rows = parseCSV(text);
+      all = rows.map(rowToWine);
+
+      // IMPORTANT: we only show visible=yes and image present (as chosen).
+      refresh();
+      statusEl.textContent = `${filterWines().length} wines · section: ${activeSection}`;
+    }catch(err){
+      console.error(err);
+      statusEl.textContent = "Error loading CSV. Check publish settings / CSV link.";
+      listView.innerHTML = `<div style="grid-column:span 12; padding:18px; color:var(--muted);">
+        Could not load data from Google Sheets CSV.
+      </div>`;
+    }
+  }
+
+  load();
+})();
+</script>
 </body>
 </html>
