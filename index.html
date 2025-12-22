@@ -2,26 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#F6F1EA" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>PeopleTalk — Wine Gallery</title>
 
   <style>
     :root{
-      --bg:#F6F1EA;
-      --panel:rgba(255,255,255,.62);
-      --card:rgba(255,255,255,.74);
-      --ink:#1F1F1F;
-      --muted:#6B6B6B;
-      --stroke:rgba(31,31,31,.12);
-      --shadow:0 18px 48px rgba(0,0,0,.12);
-      --shadow2:0 10px 28px rgba(0,0,0,.10);
-      --radius:18px;
-      --radius2:22px;
-      --chip:#FFFFFF;
+      --bg:#f6f1ea;
+      --card:#fffdf9;
+      --ink:#1f1f1f;
+      --muted:#6b6b6b;
+      --stroke:rgba(31,31,31,.10);
+      --shadow:0 14px 38px rgba(0,0,0,.08);
+      --radius:22px;
+      --accent:#c59a7c;
+      --chip:#ffffff;
       --chipStroke:rgba(31,31,31,.14);
-      --accent:#B26A4A;
-      --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
     }
 
     *{box-sizing:border-box}
@@ -29,946 +25,535 @@
     body{
       margin:0;
       font-family:var(--font);
-      background: radial-gradient(1200px 600px at 18% 0%, rgba(255,255,255,.65), rgba(255,255,255,0)) , var(--bg);
+      background:var(--bg);
       color:var(--ink);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
     }
 
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:28px 18px 42px;
-    }
-
-    header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:18px;
-      margin-bottom:18px;
-    }
-
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 22px 60px}
+    .top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap}
     .brand{
-      letter-spacing:.18em;
+      letter-spacing:.12em;
       font-size:12px;
       color:rgba(31,31,31,.55);
+      text-transform:uppercase;
+      margin-bottom:8px;
     }
+    h1{margin:0;font-size:40px;line-height:1.05}
+    .sub{margin-top:8px;color:rgba(31,31,31,.55);max-width:620px}
 
-    h1{
-      margin:6px 0 6px;
-      font-size:40px;
-      line-height:1.05;
-      font-weight:650;
-    }
-
-    .subtitle{
-      margin:0;
-      color:rgba(31,31,31,.62);
-      font-size:16px;
-      line-height:1.5;
-      max-width:560px;
-    }
-
-    .toolbar{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      padding-top:10px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      background:var(--panel);
+    .controls{
+      margin-top:18px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+      padding:16px;
       border:1px solid var(--stroke);
       border-radius:999px;
-      padding:10px 12px;
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
+      background:rgba(255,255,255,.35);
+      backdrop-filter:saturate(1.2) blur(6px);
     }
 
-    .segmented{
-      display:inline-flex;
-      background:rgba(255,255,255,.55);
-      border:1px solid var(--stroke);
-      border-radius:999px;
-      padding:4px;
-      gap:4px;
-    }
-    .segmented button{
-      border:0;
-      background:transparent;
-      padding:8px 12px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
-      color:rgba(31,31,31,.72);
-    }
-    .segmented button.active{
-      background:#fff;
-      color:var(--ink);
-      box-shadow:0 6px 14px rgba(0,0,0,.10);
-    }
-
-    .sortWrap{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:0 6px;
-      color:rgba(31,31,31,.62);
-      font-weight:600;
-      white-space:nowrap;
-    }
-    select{
-      font-family:var(--font);
-      border:1px solid var(--stroke);
-      background:rgba(255,255,255,.72);
-      padding:8px 12px;
-      border-radius:12px;
-      outline:none;
-      cursor:pointer;
-      font-weight:650;
-      color:rgba(31,31,31,.82);
-    }
-
-    .filters{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin:18px 0 14px;
-    }
-
-    .filterBtn{
-      border:1px solid var(--stroke);
-      background:rgba(255,255,255,.60);
-      color:rgba(31,31,31,.80);
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tab{
+      border:1px solid var(--chipStroke);
+      background:var(--chip);
       padding:10px 14px;
       border-radius:999px;
       cursor:pointer;
-      font-weight:650;
-      box-shadow:0 10px 26px rgba(0,0,0,.08);
-      backdrop-filter: blur(10px);
+      font-size:14px;
+      color:var(--ink);
+      user-select:none;
+      touch-action:manipulation;
     }
-    .filterBtn.active{
-      background:rgba(178,106,74,.14);
-      border-color:rgba(178,106,74,.35);
-      color:rgba(31,31,31,.92);
+    .tab.active{
+      border-color:rgba(197,154,124,.55);
+      box-shadow:0 0 0 3px rgba(197,154,124,.16) inset;
+    }
+
+    .rightControls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .select{
+      border:1px solid var(--chipStroke);
+      background:var(--chip);
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:14px;
+      color:var(--ink);
+      touch-action:manipulation;
     }
 
     .metaLine{
-      display:flex;
-      align-items:center;
-      gap:10px;
+      margin:14px 6px 0;
       color:rgba(31,31,31,.55);
+      display:flex;align-items:center;gap:8px;
       font-size:14px;
-      margin:10px 0 14px;
     }
-    .dot{
-      width:7px;height:7px;border-radius:999px;background:var(--accent);
-      opacity:.85;
-    }
+    .dot{width:7px;height:7px;border-radius:999px;background:var(--accent);display:inline-block}
 
     .grid{
+      margin-top:14px;
       display:grid;
-      grid-template-columns:repeat(2, minmax(0, 1fr));
-      gap:14px;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:18px;
     }
 
+    /* Card */
     .card{
       background:var(--card);
       border:1px solid var(--stroke);
-      border-radius: var(--radius2);
-      padding:14px;
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
-      cursor:pointer;
-      transition: transform .12s ease, box-shadow .12s ease;
-      min-height:170px;
-    }
-    .card:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
-    .card:active{ transform: translateY(0px); }
-
-    .cardInner{
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
       display:grid;
-      grid-template-columns: 110px 1fr 120px;
-      gap:14px;
+      grid-template-columns:200px 1fr; /* больше места бутылке */
+      gap:16px;
       align-items:stretch;
+      cursor:pointer;
+      position:relative;
+      outline:none;
+      touch-action:manipulation;
+    }
+    .card:focus{
+      box-shadow:0 0 0 4px rgba(197,154,124,.18), var(--shadow);
+      border-color:rgba(197,154,124,.55);
     }
 
-    /* IMPORTANT: no gray frame around bottle */
-    .bottle{
-      width:110px;
-      height:160px;         /* enough height to feel "full" */
+    /* Bottle: NO frame, try "full height" */
+    .bottleSlot{
+      height:100%;
       display:flex;
       align-items:stretch;
       justify-content:center;
-      overflow:visible;     /* no clipping / no rounded frame */
-      background:transparent;
-      border:0;
-      border-radius:0;
+      padding:0;
+      min-height:170px;
     }
-    .bottle img{
-      width:100%;
+    .bottleSlot img{
       height:100%;
-      object-fit:contain;   /* keeps correct proportions */
+      width:auto;
+      max-width:100%;
+      object-fit:contain;
       display:block;
-      border:0;
-      border-radius:0;
-      background:transparent;
-      box-shadow:none;
     }
 
-    .title{
-      margin:2px 0 4px;
-      font-size:18px;
-      line-height:1.15;
-      font-weight:760;
-    }
-    .producer{
-      margin:0;
-      font-size:14px;
-      color:rgba(31,31,31,.72);
-      font-weight:650;
-    }
-    .year{
-      margin:2px 0 0;
-      font-size:13px;
-      color:rgba(31,31,31,.62);
-      font-weight:650;
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--chipStroke);
-      background:rgba(255,255,255,.70);
-      font-size:12px;
-      color:rgba(31,31,31,.78);
-      font-weight:700;
-      white-space:nowrap;
-    }
+    .titleRow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .name{font-weight:650;font-size:20px;line-height:1.12;margin:0}
+    .producer{margin-top:4px;color:rgba(31,31,31,.70);font-size:14px}
+    .vintage{margin-top:2px;color:rgba(31,31,31,.55);font-size:14px}
 
     .prices{
       text-align:right;
-      color:rgba(31,31,31,.78);
-      font-weight:750;
+      white-space:nowrap;
       font-size:13px;
-      padding-top:2px;
+      color:rgba(31,31,31,.62);
+      margin-left:auto;
+      min-width:110px;
     }
-    .prices .row{
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-      align-items:baseline;
-      margin:2px 0;
-    }
-    .prices .label{
-      font-weight:700;
-      color:rgba(31,31,31,.55);
-    }
-    .prices .val{
-      font-size:18px;
-      color:rgba(31,31,31,.92);
-      font-weight:820;
+    .prices b{color:var(--ink);font-size:18px}
+    .prices .row{display:flex;justify-content:flex-end;gap:8px;align-items:baseline}
+
+    .chips{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      border:1px solid var(--chipStroke);
+      background:var(--chip);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:rgba(31,31,31,.78);
     }
 
     /* Modal */
-    .modalBackdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.35);
+    .modalOverlay{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.38);
       display:none;
       align-items:center;
       justify-content:center;
-      padding:16px;
-      z-index:50;
+      padding:22px;
+      z-index:999;
     }
     .modal{
-      width:min(980px, 100%);
-      background:rgba(246,241,234,.98);
-      border:1px solid rgba(31,31,31,.16);
-      border-radius:24px;
-      box-shadow: 0 28px 80px rgba(0,0,0,.32);
+      width:min(920px, 100%);
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:28px;
+      box-shadow:0 22px 60px rgba(0,0,0,.22);
       overflow:hidden;
-    }
-    .modalHeader{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:16px 16px 12px;
-      border-bottom:1px solid rgba(31,31,31,.10);
-    }
-    .modalHeader .close{
-      border:1px solid rgba(31,31,31,.14);
-      background:rgba(255,255,255,.65);
-      border-radius:999px;
-      padding:8px 12px;
-      cursor:pointer;
-      font-weight:800;
-    }
-    .modalBody{
       display:grid;
-      grid-template-columns: 260px 1fr;
-      gap:18px;
-      padding:18px;
+      grid-template-columns:320px 1fr;
     }
-
-    /* IMPORTANT: no frame in modal either */
-    .modalBottle{
-      width:100%;
-      height:420px;
+    .modalLeft{
+      padding:18px;
+      background:rgba(255,255,255,.45);
       display:flex;
       align-items:center;
       justify-content:center;
-      background:transparent;
-      border:0;
-      border-radius:0;
     }
-    .modalBottle img{
+    .modalLeft img{
       width:100%;
-      height:100%;
-      object-fit:contain;
+      height:auto;
       display:block;
-      border:0;
-      border-radius:0;
-      background:transparent;
-      box-shadow:none;
+      object-fit:contain;
     }
-
-    .modalTitle{
-      font-size:26px;
-      font-weight:850;
-      line-height:1.1;
-      margin:0 0 6px;
+    .modalRight{padding:18px 18px 22px}
+    .modalTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .closeBtn{
+      border:1px solid var(--chipStroke);
+      background:#fff;
+      border-radius:999px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-size:14px;
+      touch-action:manipulation;
     }
-    .modalProducer{
-      margin:0 0 10px;
-      color:rgba(31,31,31,.72);
-      font-weight:750;
-    }
-    .modalTopRow{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-    }
-    .modalPrices{
-      text-align:right;
-      min-width:170px;
-    }
-    .modalPrices .row{
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      align-items:baseline;
-      margin:4px 0;
-      font-weight:850;
-    }
-    .modalPrices .label{ color:rgba(31,31,31,.55); font-weight:750; }
-    .modalPrices .val{ font-size:22px; color:rgba(31,31,31,.92); }
-
-    .sectionTitle{
-      margin:14px 0 8px;
+    .blockTitle{
+      margin-top:14px;
       font-size:12px;
       letter-spacing:.14em;
       text-transform:uppercase;
       color:rgba(31,31,31,.55);
-      font-weight:850;
     }
-    .block{
-      background:rgba(255,255,255,.55);
-      border:1px solid rgba(31,31,31,.10);
-      border-radius:16px;
-      padding:12px 12px;
-    }
-    .block p{
-      margin:0;
-      color:rgba(31,31,31,.82);
-      font-weight:650;
+    .blockBody{
+      margin-top:8px;
+      color:rgba(31,31,31,.85);
+      font-size:15px;
       line-height:1.45;
       white-space:pre-wrap;
     }
 
-    .hint{
-      font-size:12px;
-      color:rgba(31,31,31,.50);
-      margin-top:8px;
-    }
-
-    @media (max-width: 920px){
-      header{ flex-direction:column; align-items:flex-start; }
-      .toolbar{ justify-content:flex-start; }
-      .grid{ grid-template-columns: 1fr; }
-      .cardInner{ grid-template-columns: 110px 1fr 110px; }
-      .modalBody{ grid-template-columns: 1fr; }
-      .modalBottle{ height:320px; }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .card{grid-template-columns:170px 1fr}
+      h1{font-size:34px}
+      .modal{grid-template-columns:1fr}
+      .modalLeft{display:none}
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <header>
+    <div class="top">
       <div>
-        <div class="brand">PEOPLETALK · WINE GALLERY</div>
+        <div class="brand">PEOPLETALK • WINE GALLERY</div>
         <h1>Wine Gallery</h1>
-        <p class="subtitle">MVP prototype · Live from Google Sheets (CSV)</p>
+        <div class="sub">Minimal list. Tap a wine to open details and pairing.</div>
       </div>
-
-      <div class="toolbar">
-        <div class="pill">
-          <div class="segmented" aria-label="View switch">
-            <button id="viewListBtn" class="active" type="button">List</button>
-          </div>
-          <div class="sortWrap">
-            <span>Sort:</span>
-            <select id="sortSelect">
-              <option value="curated" selected>Curated order</option>
-              <option value="name">Name (A–Z)</option>
-              <option value="bottle_desc">Bottle price (high → low)</option>
-              <option value="glass_desc">Glass price (high → low)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div class="filters" id="filters">
-      <button class="filterBtn active" data-section="All" type="button">All</button>
-      <button class="filterBtn" data-section="Sparkling" type="button">Sparkling</button>
-      <button class="filterBtn" data-section="White" type="button">White</button>
-      <button class="filterBtn" data-section="Rosé" type="button">Rosé</button>
-      <button class="filterBtn" data-section="Red" type="button">Red</button>
     </div>
 
-    <div class="metaLine">
-      <span class="dot"></span>
-      <span id="countLine">0 wines · section: All</span>
+    <div class="controls">
+      <div class="tabs" id="tabs"></div>
+      <div class="rightControls">
+        <select class="select" id="sort">
+          <option value="curated" selected>Curated order</option>
+          <option value="name_asc">Name A→Z</option>
+          <option value="price_bottle_asc">Bottle price low→high</option>
+          <option value="price_bottle_desc">Bottle price high→low</option>
+        </select>
+      </div>
     </div>
 
+    <div class="metaLine" id="metaLine"><span class="dot"></span> Loading…</div>
     <div class="grid" id="grid"></div>
-
-    <div class="hint" id="hint"></div>
   </div>
 
   <!-- Modal -->
-  <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Wine details">
-    <div class="modal">
-      <div class="modalHeader">
-        <div style="font-weight:850;color:rgba(31,31,31,.72)">Wine details</div>
-        <button class="close" id="modalClose" type="button">Close</button>
+  <div class="modalOverlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalLeft">
+        <img id="mImg" alt="" />
       </div>
-
-      <div class="modalBody">
-        <div class="modalBottle">
-          <img id="modalImg" alt="" />
+      <div class="modalRight">
+        <div class="modalTop">
+          <div>
+            <div class="name" id="mName"></div>
+            <div class="producer" id="mProducer"></div>
+            <div class="vintage" id="mVintage"></div>
+            <div class="chips" id="mChips"></div>
+          </div>
+          <button class="closeBtn" id="closeBtn">Close</button>
         </div>
 
-        <div>
-          <div class="modalTopRow">
-            <div>
-              <h2 class="modalTitle" id="modalTitle"></h2>
-              <p class="modalProducer" id="modalProducer"></p>
-              <div class="chips" id="modalChips"></div>
-            </div>
+        <div class="blockTitle">Prices</div>
+        <div class="blockBody" id="mPrices"></div>
 
-            <div class="modalPrices" id="modalPrices"></div>
-          </div>
-
-          <div id="pairingWrap">
-            <div class="sectionTitle">PeopleTalk pairing</div>
-            <div class="block"><p id="modalPairPT">—</p></div>
-
-            <div class="sectionTitle">World pairing</div>
-            <div class="block"><p id="modalPairWorld">—</p></div>
-          </div>
-
-          <div id="extraWrap" style="display:none">
-            <div class="sectionTitle">Notes</div>
-            <div class="block"><p id="modalNotes">—</p></div>
-          </div>
-        </div>
+        <div class="blockTitle">PeopleTalk pairing</div>
+        <div class="blockBody" id="mPairing"></div>
       </div>
     </div>
   </div>
 
   <script>
-    /*****************************************************************
-     * CONFIG
-     * 1) Put your Google Sheet CSV export link here:
-     *    - File > Share > Publish to web > CSV
-     *    - or a CSV URL you already use
-     *****************************************************************/
+    // ✅ YOUR CSV (already set)
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc7yfiUN3Wgz9vCWrKVJksRoQ6EFYzDq6P40HaN1v2hmhk0nKicji-UZYZyd7LF2-lcSSU264vG53f/pub?gid=178668445&single=true&output=csv";
 
-    // If you already have a working CSV link, paste it here:
-    // Example:
-    // const CSV_URL = "https://docs.google.com/spreadsheets/d/e/.../pub?output=csv";
+    // Tabs order you want
+    const SECTIONS = ["All","Sparkling","White","Rosé","Red"];
 
-    /*****************************************************************
-     * Expected columns (case-insensitive):
-     * id, section, name, producer, visible, order, bottle_img
-     * optional: vintage, year, price_glass, price_bottle, country, region, grape,
-     *          pairing_peopletalk, pairing_world, notes
-     *****************************************************************/
-
-    const gridEl = document.getElementById("grid");
-    const countLine = document.getElementById("countLine");
-    const hintEl = document.getElementById("hint");
-
-    const sortSelect = document.getElementById("sortSelect");
-    const filtersEl = document.getElementById("filters");
-
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const modalClose = document.getElementById("modalClose");
-    const modalImg = document.getElementById("modalImg");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalProducer = document.getElementById("modalProducer");
-    const modalChips = document.getElementById("modalChips");
-    const modalPrices = document.getElementById("modalPrices");
-    const modalPairPT = document.getElementById("modalPairPT");
-    const modalPairWorld = document.getElementById("modalPairWorld");
-    const pairingWrap = document.getElementById("pairingWrap");
-    const extraWrap = document.getElementById("extraWrap");
-    const modalNotes = document.getElementById("modalNotes");
-
-    let allWines = [];
+    let allRows = [];
     let activeSection = "All";
 
-    function normKey(k){
-      return String(k || "")
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, "_");
+    const $ = (id)=>document.getElementById(id);
+
+    function parseCSV(text){
+      // CSV parser (handles commas + quotes)
+      const out=[[]];
+      let i=0, field="", inQuotes=false;
+
+      while(i<text.length){
+        const c=text[i];
+        if(c === '"'){
+          if(inQuotes && text[i+1] === '"'){ field+='"'; i++; }
+          else inQuotes = !inQuotes;
+        } else if(c === ',' && !inQuotes){
+          out[out.length-1].push(field); field="";
+        } else if((c === '\n' || c === '\r') && !inQuotes){
+          if(c === '\r' && text[i+1] === '\n') i++;
+          out[out.length-1].push(field); field="";
+          if(out[out.length-1].some(v=>String(v).trim()!=="")) out.push([]);
+        } else {
+          field += c;
+        }
+        i++;
+      }
+      out[out.length-1].push(field);
+
+      const header = out[0].map(h=>String(h||"").trim());
+      const rows = [];
+
+      for(let r=1;r<out.length;r++){
+        const obj = {};
+        for(let c=0;c<header.length;c++){
+          const key = header[c];
+          if(!key) continue;
+          obj[key] = String(out[r][c] ?? "").trim();
+        }
+        // skip fully empty
+        if(Object.values(obj).some(v=>String(v).trim() !== "")) rows.push(obj);
+      }
+      return rows;
     }
 
-    function parsePrice(v){
-      if(v == null) return null;
-      const s = String(v).replace(/[^0-9.]/g,"").trim();
+    function getAny(row, keys){
+      for(const k of keys){
+        if(row[k] != null && String(row[k]).trim() !== "") return String(row[k]).trim();
+      }
+      return "";
+    }
+
+    function numFromAny(row, keys){
+      const raw = getAny(row, keys);
+      if(!raw) return null;
+      const s = String(raw).replace(/[^0-9.]/g,'').trim();
       if(!s) return null;
       const n = Number(s);
       return Number.isFinite(n) ? n : null;
     }
 
-    function safeText(v){
-      const s = (v == null) ? "" : String(v).trim();
-      return s;
+    function fmtMoney(n){
+      if(n==null) return "";
+      return "$" + n.toFixed(0);
     }
 
-    function toYesNo(v){
-      const s = safeText(v).toLowerCase();
-      return (s === "yes" || s === "y" || s === "true" || s === "1");
+    function visibleYes(row){
+      return String(getAny(row, ["visible"])).toLowerCase() === "yes";
     }
 
-    function csvToRows(text){
-      // Simple robust CSV parser (handles quotes)
-      const rows = [];
-      let row = [];
-      let cur = "";
-      let inQuotes = false;
+    function buildTabs(){
+      const tabs = $("tabs");
+      tabs.innerHTML = "";
+      SECTIONS.forEach(sec=>{
+        const b = document.createElement("div");
+        b.className = "tab" + (sec===activeSection ? " active":"");
+        b.textContent = sec;
+        b.onclick = ()=>{
+          activeSection = sec;
+          document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+          b.classList.add("active");
+          render();
+        };
+        tabs.appendChild(b);
+      });
+    }
 
-      for(let i=0;i<text.length;i++){
-        const c = text[i];
-        const next = text[i+1];
+    function chipList(row){
+      // show only what exists; section is always useful
+      const chips = [];
+      const section = getAny(row, ["section"]);
+      if(section) chips.push(section);
 
-        if(c === '"' ){
-          if(inQuotes && next === '"'){
-            cur += '"'; i++;
-          } else {
-            inQuotes = !inQuotes;
-          }
-          continue;
-        }
+      const country = getAny(row, ["country","Country"]);
+      if(country) chips.push(country);
 
-        if(!inQuotes && (c === ",")){
-          row.push(cur); cur = "";
-          continue;
-        }
+      const region = getAny(row, ["region","Region"]);
+      if(region) chips.push(region);
 
-        if(!inQuotes && (c === "\n")){
-          row.push(cur);
-          rows.push(row);
-          row = [];
-          cur = "";
-          continue;
-        }
+      return chips;
+    }
 
-        if(c === "\r") continue;
+    function getFiltered(){
+      let rows = allRows.filter(visibleYes);
 
-        cur += c;
-      }
-      // last cell
-      if(cur.length || row.length){
-        row.push(cur);
-        rows.push(row);
+      if(activeSection !== "All"){
+        rows = rows.filter(r => getAny(r, ["section"]) === activeSection);
       }
       return rows;
     }
 
-    function rowsToObjects(rows){
-      if(!rows.length) return [];
-      const header = rows[0].map(h => normKey(h));
-      const objs = [];
+    function getSorted(rows){
+      const mode = $("sort").value;
+      const copy = rows.slice();
 
-      for(let r=1;r<rows.length;r++){
-        const line = rows[r];
-        if(line.every(x => safeText(x)==="")) continue;
-
-        const o = {};
-        for(let i=0;i<header.length;i++){
-          o[header[i]] = line[i] ?? "";
-        }
-        objs.push(o);
+      if(mode === "curated"){
+        copy.sort((a,b)=> (numFromAny(a,["order"])||9999) - (numFromAny(b,["order"])||9999));
+        return copy;
       }
-      return objs;
-    }
 
-    function pick(o, ...keys){
-      for(const k of keys){
-        const nk = normKey(k);
-        if(o[nk] != null && safeText(o[nk]) !== "") return o[nk];
+      if(mode === "name_asc"){
+        copy.sort((a,b)=> getAny(a,["name"]).localeCompare(getAny(b,["name"])));
+        return copy;
       }
-      return "";
-    }
 
-    function buildWine(raw){
-      // required
-      const id = safeText(pick(raw, "id")) || cryptoRandomId();
-      const section = safeText(pick(raw, "section")) || "Other";
-      const name = safeText(pick(raw, "name"));
-      const producer = safeText(pick(raw, "producer"));
-
-      // visibility
-      const visible = toYesNo(pick(raw, "visible"));
-
-      // curated order
-      const order = Number(safeText(pick(raw, "order")) || 9999);
-
-      // bottle image
-      const bottle_img = safeText(pick(raw, "bottle_img"));
-
-      // optional fields
-      const vintage = safeText(pick(raw, "vintage", "year")) || ""; // can be NV
-      const country = safeText(pick(raw, "country"));
-      const region = safeText(pick(raw, "region"));
-      const grape = safeText(pick(raw, "grape", "variety"));
-
-      const price_glass = parsePrice(pick(raw, "price_glass", "glass"));
-      const price_bottle = parsePrice(pick(raw, "price_bottle", "bottle"));
-
-      const pairing_pt = safeText(pick(raw, "pairing_peopletalk", "peopletalk_pairing", "pairing_pt"));
-      const pairing_world = safeText(pick(raw, "pairing_world", "world_pairing"));
-
-      const notes = safeText(pick(raw, "notes", "story", "about"));
-
-      return {
-        id, section, name, producer, visible, order,
-        bottle_img, vintage, country, region, grape,
-        price_glass, price_bottle,
-        pairing_pt, pairing_world, notes
-      };
-    }
-
-    function cryptoRandomId(){
-      return "w_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-    }
-
-    function sortWines(list, mode){
-      const arr = [...list];
-      if(mode === "name"){
-        arr.sort((a,b) => a.name.localeCompare(b.name));
-        return arr;
+      if(mode === "price_bottle_asc"){
+        copy.sort((a,b)=> (numFromAny(a,["bottle_price","bottle","price_bottle"])??999999) - (numFromAny(b,["bottle_price","bottle","price_bottle"])??999999));
+        return copy;
       }
-      if(mode === "bottle_desc"){
-        arr.sort((a,b) => (b.price_bottle ?? -1) - (a.price_bottle ?? -1));
-        return arr;
-      }
-      if(mode === "glass_desc"){
-        arr.sort((a,b) => (b.price_glass ?? -1) - (a.price_glass ?? -1));
-        return arr;
-      }
-      // curated
-      arr.sort((a,b) => (a.order - b.order) || a.name.localeCompare(b.name));
-      return arr;
-    }
 
-    function filterWines(){
-      const base = allWines.filter(w => w.visible);
-      if(activeSection === "All") return base;
-      return base.filter(w => (w.section || "").toLowerCase() === activeSection.toLowerCase());
-    }
+      if(mode === "price_bottle_desc"){
+        copy.sort((a,b)=> (numFromAny(b,["bottle_price","bottle","price_bottle"])??-1) - (numFromAny(a,["bottle_price","bottle","price_bottle"])??-1));
+        return copy;
+      }
 
-    function formatMoney(n){
-      if(n == null) return "";
-      return "$" + Math.round(n).toString();
+      return copy;
     }
 
     function render(){
-      const list = sortWines(filterWines(), sortSelect.value);
+      const rows = getSorted(getFiltered());
 
-      // count line
-      countLine.textContent = `${list.length} wines · section: ${activeSection}`;
+      $("metaLine").innerHTML =
+        `<span class="dot"></span> ${rows.length} wines · section: ${activeSection}`;
 
-      gridEl.innerHTML = "";
-      list.forEach(w => gridEl.appendChild(renderCard(w)));
-    }
+      const grid = $("grid");
+      grid.innerHTML = "";
 
-    function renderCard(w){
-      const card = document.createElement("div");
-      card.className = "card";
-      card.tabIndex = 0;
-      card.setAttribute("role","button");
-      card.setAttribute("aria-label", `Open ${w.name}`);
+      rows.forEach(row=>{
+        const name = getAny(row, ["name"]);
+        const producer = getAny(row, ["producer"]);
+        const vintage = getAny(row, ["vintage","year","Year","NV"]);
 
-      const inner = document.createElement("div");
-      inner.className = "cardInner";
+        // bottle_img (your column R)
+        const img = getAny(row, ["bottle_img","bottle_img_url","image","img"]);
 
-      // Bottle (NO FRAME)
-      const bottle = document.createElement("div");
-      bottle.className = "bottle";
-      const img = document.createElement("img");
-      img.alt = w.name || "Wine bottle";
-      img.loading = "lazy";
-      img.decoding = "async";
-      img.referrerPolicy = "no-referrer";
-      if(w.bottle_img){
-        img.src = w.bottle_img;
-      } else {
-        // keep empty image (no placeholder frame)
-        img.src = "";
-      }
-      bottle.appendChild(img);
+        // prices: supports multiple possible column names
+        const glass = numFromAny(row, ["glass_price","glass","btg_price","btg","price_glass","glassPrice"]);
+        const bottle = numFromAny(row, ["bottle_price","bottle","price_bottle","bottlePrice"]);
 
-      // Main text
-      const main = document.createElement("div");
-
-      const title = document.createElement("div");
-      title.className = "title";
-      title.textContent = w.name || "—";
-
-      const producer = document.createElement("p");
-      producer.className = "producer";
-      producer.textContent = w.producer || "—";
-
-      // IMPORTANT: no "Veneto, Italy" line — only year/NV
-      const year = document.createElement("p");
-      year.className = "year";
-      year.textContent = (w.vintage && w.vintage.trim()) ? w.vintage.trim() : "NV";
-
-      const chips = document.createElement("div");
-      chips.className = "chips";
-
-      // chips: type(section), country, region (only if exist)
-      if(w.section) chips.appendChild(makeChip(w.section));
-      if(w.country) chips.appendChild(makeChip(w.country));
-      if(w.region) chips.appendChild(makeChip(w.region));
-
-      main.appendChild(title);
-      main.appendChild(producer);
-      main.appendChild(year);
-      main.appendChild(chips);
-
-      // Prices
-      const prices = document.createElement("div");
-      prices.className = "prices";
-
-      // show Glass only if exists
-      if(w.price_glass != null){
-        prices.appendChild(priceRow("Glass", formatMoney(w.price_glass), true));
-      }
-      if(w.price_bottle != null){
-        prices.appendChild(priceRow("Bottle", formatMoney(w.price_bottle), true));
-      } else {
-        // if bottle price missing but glass exists, keep layout okay
-        if(w.price_glass == null){
-          prices.appendChild(priceRow("—", "—", false));
+        let priceHTML = "";
+        if(glass != null || bottle != null){
+          const lines = [];
+          if(glass != null) lines.push(`<div class="row"><span>Glass</span><b>${fmtMoney(glass)}</b></div>`);
+          if(bottle != null) lines.push(`<div class="row"><span>Bottle</span><b>${fmtMoney(bottle)}</b></div>`);
+          priceHTML = `<div class="prices">${lines.join("")}</div>`;
+        } else {
+          priceHTML = `<div class="prices"></div>`;
         }
-      }
 
-      inner.appendChild(bottle);
-      inner.appendChild(main);
-      inner.appendChild(prices);
+        const chips = chipList(row).map(x=>`<span class="chip">${x}</span>`).join("");
 
-      card.appendChild(inner);
+        const card = document.createElement("div");
+        card.className = "card";
+        card.setAttribute("role","button");
+        card.setAttribute("tabindex","0");
 
-      // Open modal
-      card.addEventListener("click", () => openModal(w));
-      card.addEventListener("keydown", (e) => {
-        if(e.key === "Enter" || e.key === " "){
-          e.preventDefault();
-          openModal(w);
-        }
+        card.innerHTML = `
+          <div class="bottleSlot">
+            ${img ? `<img src="${img}" alt="${name.replaceAll('"','')}" loading="lazy" />` : ""}
+          </div>
+
+          <div>
+            <div class="titleRow">
+              <div>
+                <div class="name">${name}</div>
+                <div class="producer">${producer}</div>
+                <div class="vintage">${vintage}</div>
+              </div>
+              ${priceHTML}
+            </div>
+
+            <div class="chips">${chips}</div>
+          </div>
+        `;
+
+        const open = ()=>openModal(row);
+        card.addEventListener("click", open, {passive:true});
+        card.addEventListener("keydown", (e)=>{ if(e.key === "Enter") open(); });
+
+        grid.appendChild(card);
       });
-
-      return card;
     }
 
-    function makeChip(text){
-      const c = document.createElement("span");
-      c.className = "chip";
-      c.textContent = text;
-      return c;
-    }
+    function openModal(row){
+      const overlay = $("overlay");
+      overlay.style.display = "flex";
+      overlay.setAttribute("aria-hidden","false");
 
-    function priceRow(label, value, emphasize){
-      const row = document.createElement("div");
-      row.className = "row";
-      const l = document.createElement("span");
-      l.className = "label";
-      l.textContent = label;
+      const name = getAny(row, ["name"]);
+      const producer = getAny(row, ["producer"]);
+      const vintage = getAny(row, ["vintage","year","Year","NV"]);
+      const img = getAny(row, ["bottle_img","bottle_img_url","image","img"]);
 
-      const v = document.createElement("span");
-      v.className = emphasize ? "val" : "label";
-      v.textContent = value;
+      $("mName").textContent = name;
+      $("mProducer").textContent = producer;
+      $("mVintage").textContent = vintage;
 
-      row.appendChild(l);
-      row.appendChild(v);
-      return row;
-    }
+      $("mImg").src = img || "";
+      $("mImg").alt = name || "";
 
-    function openModal(w){
-      modalTitle.textContent = w.name || "—";
-      modalProducer.textContent = w.producer || "—";
+      $("mChips").innerHTML = chipList(row).map(x=>`<span class="chip">${x}</span>`).join("");
 
-      // Bottle (NO FRAME)
-      modalImg.alt = w.name || "Wine bottle";
-      modalImg.referrerPolicy = "no-referrer";
-      modalImg.src = w.bottle_img || "";
+      const glass = numFromAny(row, ["glass_price","glass","btg_price","btg","price_glass","glassPrice"]);
+      const bottle = numFromAny(row, ["bottle_price","bottle","price_bottle","bottlePrice"]);
 
-      // chips in modal too
-      modalChips.innerHTML = "";
-      if(w.section) modalChips.appendChild(makeChip(w.section));
-      if(w.country) modalChips.appendChild(makeChip(w.country));
-      if(w.region) modalChips.appendChild(makeChip(w.region));
-      if(w.vintage) modalChips.appendChild(makeChip(w.vintage));
-      if(w.grape) modalChips.appendChild(makeChip(w.grape));
+      const lines = [];
+      if(glass != null) lines.push(`Glass: ${fmtMoney(glass)}`);
+      if(bottle != null) lines.push(`Bottle: ${fmtMoney(bottle)}`);
+      $("mPrices").textContent = lines.length ? lines.join("\n") : "—";
 
-      // prices
-      modalPrices.innerHTML = "";
-      if(w.price_glass != null){
-        modalPrices.appendChild(modalPriceRow("Glass", formatMoney(w.price_glass)));
-      }
-      if(w.price_bottle != null){
-        modalPrices.appendChild(modalPriceRow("Bottle", formatMoney(w.price_bottle)));
-      }
+      // ✅ PeopleTalk pairing ONLY (no world pairing)
+      const pairing = getAny(row, [
+        "pairing_peopletalk",
+        "peopletalk_pairing",
+        "PeopleTalk",
+        "peopletalk",
+        "pairing",
+        "pairing_pt"
+      ]);
 
-      // pairings ONLY inside modal
-      const hasPT = (w.pairing_pt && w.pairing_pt.trim());
-      const hasWorld = (w.pairing_world && w.pairing_world.trim());
-      if(hasPT || hasWorld){
-        pairingWrap.style.display = "";
-        modalPairPT.textContent = hasPT ? w.pairing_pt : "—";
-        modalPairWorld.textContent = hasWorld ? w.pairing_world : "—";
-      } else {
-        pairingWrap.style.display = "none";
-      }
-
-      // optional notes
-      if(w.notes && w.notes.trim()){
-        extraWrap.style.display = "";
-        modalNotes.textContent = w.notes;
-      } else {
-        extraWrap.style.display = "none";
-      }
-
-      modalBackdrop.style.display = "flex";
-      document.body.style.overflow = "hidden";
-    }
-
-    function modalPriceRow(label, value){
-      const row = document.createElement("div");
-      row.className = "row";
-      const l = document.createElement("span");
-      l.className = "label";
-      l.textContent = label;
-
-      const v = document.createElement("span");
-      v.className = "val";
-      v.textContent = value || "—";
-
-      row.appendChild(l);
-      row.appendChild(v);
-      return row;
+      $("mPairing").textContent = pairing || "—";
     }
 
     function closeModal(){
-      modalBackdrop.style.display = "none";
-      document.body.style.overflow = "";
+      const overlay = $("overlay");
+      overlay.style.display = "none";
+      overlay.setAttribute("aria-hidden","true");
     }
 
-    modalBackdrop.addEventListener("click", (e) => {
-      if(e.target === modalBackdrop) closeModal();
-    });
-    modalClose.addEventListener("click", closeModal);
-    window.addEventListener("keydown", (e) => {
-      if(e.key === "Escape" && modalBackdrop.style.display === "flex") closeModal();
+    $("closeBtn").addEventListener("click", closeModal);
+    $("overlay").addEventListener("click", (e)=>{
+      if(e.target === $("overlay")) closeModal();
     });
 
-    // Filters
-    filtersEl.addEventListener("click", (e) => {
-      const btn = e.target.closest(".filterBtn");
-      if(!btn) return;
-      activeSection = btn.dataset.section || "All";
-      [...filtersEl.querySelectorAll(".filterBtn")].forEach(b => b.classList.toggle("active", b === btn));
-      render();
-    });
+    $("sort").addEventListener("change", render);
 
-    // Sort
-    sortSelect.addEventListener("change", render);
+    async function boot(){
+      buildTabs();
 
-    async function loadData(){
-      // If CSV_URL empty, show hint
-      if(!CSV_URL){
-        hintEl.textContent = "CSV_URL is not set. Paste your Google Sheets CSV link into CSV_URL in the code.";
-        return;
-      }
-
-      hintEl.textContent = "Loading…";
-      const res = await fetch(CSV_URL, { cache: "no-store" });
-      if(!res.ok){
-        hintEl.textContent = `Failed to load CSV: ${res.status}`;
-        return;
-      }
+      const res = await fetch(CSV_URL, {cache:"no-store"});
       const text = await res.text();
+      allRows = parseCSV(text);
 
-      const rows = csvToRows(text);
-      const objs = rowsToObjects(rows);
-
-      allWines = objs.map(buildWine);
-
-      hintEl.textContent = "";
       render();
     }
 
-    // START
-    loadData().catch(err => {
-      console.error(err);
-      hintEl.textContent = "Error loading CSV. Check console.";
-    });
-  </script>
-
-  <script>
-    /*****************************************************************
-     * QUICK OVERRIDE (optional)
-     * If you want to set CSV without editing the main script:
-     * window.CSV_URL_OVERRIDE = "YOUR_CSV_LINK";
-     *****************************************************************/
-    // window.CSV_URL_OVERRIDE = "PASTE_YOUR_CSV_LINK_HERE";
+    boot();
   </script>
 </body>
 </html>
