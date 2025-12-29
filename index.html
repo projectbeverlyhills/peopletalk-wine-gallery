@@ -70,28 +70,11 @@
       transition: transform .08s ease, background .15s ease;
     }
     .btn:active{ transform: translateY(1px); }
-    .btn.primary{
-      background: rgba(255,255,255,0.80);
-    }
-    .btn .ico{
-      width:18px;height:18px;display:inline-block;opacity:.85;
-    }
+    .btn.primary{ background: rgba(255,255,255,0.80); }
+    .btn .ico{ width:18px;height:18px;display:inline-block;opacity:.85; }
 
     .muted{ color: var(--muted); }
     .muted2{ color: var(--muted2); }
-
-    .h1{
-      font-size: 44px;
-      letter-spacing: -0.03em;
-      line-height: 1.02;
-      margin: 0;
-    }
-    .sub{
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.4;
-    }
 
     .panel{
       border: 1px solid var(--stroke);
@@ -99,12 +82,6 @@
       border-radius: var(--radius2);
       padding: 16px;
       box-shadow: var(--shadow);
-    }
-
-    .divider{
-      height: 1px;
-      background: rgba(31,26,20,0.08);
-      margin: 12px 0;
     }
 
     /* =========================
@@ -135,7 +112,6 @@
       margin: 6px auto 14px;
       border-radius: 999px;
       overflow:hidden;
-      /* Важно: без “рамки/серого контура” вокруг бутылок/лого */
       border: none;
       background: transparent;
       box-shadow: none;
@@ -226,16 +202,16 @@
       cursor:pointer;
     }
 
-    /* ВАЖНО: единый стандарт высоты карточки */
+    /* единый стандарт высоты карточки */
     .cardInner{
       display:grid;
       grid-template-columns: 128px 1fr;
       gap: 14px;
       align-items:start;
-      min-height: 168px; /* фиксируем ощущение “одинаково и системно” */
+      min-height: 168px;
     }
 
-    /* ВАЖНО: убрали серую “рамку/контур” вокруг бутылок */
+    /* убрали рамку вокруг бутылки */
     .bottleBox{
       width: 128px;
       height: 168px;
@@ -250,7 +226,7 @@
     .bottleBox img{
       width:100%;
       height:100%;
-      object-fit: contain; /* аккуратно, без гигантских бутылок */
+      object-fit: contain;
       display:block;
     }
 
@@ -305,7 +281,7 @@
 
     /* =========================
        БЛОК 5 — WINE LIST (СПИСОК БЕЗ КАРТИНОК)
-       Две колонки: слева вино, справа цены
+       две колонки: слева вино, справа цены
        ========================= */
     .listWrap{
       border: 1px solid var(--stroke);
@@ -345,9 +321,7 @@
     }
     .row:hover{ background: rgba(255,255,255,0.40); }
 
-    .rowLeft{
-      min-width: 0;
-    }
+    .rowLeft{ min-width: 0; }
     .rowName{
       font-size: 16px;
       font-weight: 760;
@@ -504,18 +478,14 @@
     // === CSV ссылка (ЕДИНСТВЕННЫЙ источник данных) ===
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc7yfiUN3Wgz9vCWrKVJksRoQ6EFYzDq6P40HaN1v2hmhk0nKicji-UZYZyd7LF2-lcSSU264vG53f/pub?gid=178668445&single=true&output=csv";
 
-    // === Лого PeopleTalk (встроено, чтобы не нужно было загружать отдельный файл) ===
-    const LOGO_DATA_URL = "assets/peopletalk-logo.jpg";
-
-
-    // ↑ ВАЖНО: я ниже автоматически подставил полный base64 (без сокращения).
+    // === Лого PeopleTalk (файл в репозитории) ===
+    const LOGO_URL = "assets/peopletalk-logo.jpg";
   </script>
 
   <script>
     // =========================
     // БЛОК 10 — УТИЛИТЫ
     // =========================
-
     function esc(s){
       return String(s ?? "")
         .replaceAll("&","&amp;")
@@ -524,22 +494,18 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
-
     function norm(s){
       const v = String(s ?? "").trim();
       return v === "" ? "" : v;
     }
-
     function money(v){
       const t = String(v ?? "").trim();
       if(!t) return "";
-      // если в CSV уже "$15" — оставим как есть; если "15" — добавим $
       const num = t.replace("$","").trim();
       if(num === "" || num === "-") return "";
       return (t.includes("$") ? t : `$${num}`);
     }
-
-    // простой CSV parser (поддержка кавычек)
+    // CSV parser (поддержка кавычек)
     function parseCSV(text){
       const rows = [];
       let i=0, field="", row=[], inQ=false;
@@ -598,10 +564,8 @@
             headers.forEach((h, idx) => obj[h] = r[idx] ?? "");
             return obj;
           })
-          // показываем только visible=yes
           .filter(w => String(w.visible ?? "").trim().toLowerCase() === "yes");
 
-        // приводим базовые поля к удобному виду
         state.wines = wines.map(w => ({
           id: norm(w.id),
           section: norm(w.section),
@@ -642,7 +606,6 @@
       }
 
       if(state.sortMode === "curated"){
-        // сортировка по order (число), затем по name
         arr.sort((a,b) => {
           const ao = parseFloat(a.order || "9999");
           const bo = parseFloat(b.order || "9999");
@@ -676,18 +639,12 @@
     }
 
     function renderTopbar(){
-      if(state.view === "home"){
-        return "";
-      }
-
+      if(state.view === "home") return "";
       const left = `
         <div class="pillbar">
-          <div class="btn" onclick="goHome()">
-            ${iconBack()} <span>Home</span>
-          </div>
+          <div class="btn" onclick="goHome()">${iconBack()} <span>Home</span></div>
         </div>
       `;
-
       const right = `
         <div class="pillbar">
           <div class="btn ${state.view==="list" ? "primary" : ""}" onclick="goList()">
@@ -698,7 +655,6 @@
           </div>
         </div>
       `;
-
       return `<div class="topbar">${left}${right}</div>`;
     }
 
@@ -710,18 +666,14 @@
         <div class="home">
           <div class="homeCard">
             <div class="homeBadge">
-              <img alt="PeopleTalk" src="${LOGO_DATA_URL}" />
+              <img alt="PeopleTalk" src="${LOGO_URL}" />
             </div>
             <div class="homeTitle">PeopleTalk</div>
             <div class="homeTag">let’s talk about Wine</div>
 
             <div class="homeActions">
-              <div class="btn primary" onclick="goList()">
-                ${iconList()} <span>Wine List</span>
-              </div>
-              <div class="btn" onclick="goGallery()">
-                ${iconGrid()} <span>Wine Gallery</span>
-              </div>
+              <div class="btn primary" onclick="goList()">${iconList()} <span>Wine List</span></div>
+              <div class="btn" onclick="goGallery()">${iconGrid()} <span>Wine Gallery</span></div>
             </div>
           </div>
         </div>
@@ -733,7 +685,6 @@
     // =========================
     function renderGallery(){
       const arr = getFiltered();
-
       const sections = ["All","Sparkling","White","Rosé","Red"];
 
       const filterChips = `
@@ -748,7 +699,7 @@
         <div class="pillbar">
           <div class="btn">
             <span class="muted2">Sort:</span>
-            <select id="sortSelect" style="border:none;background:transparent;font:inherit;outline:none;cursor:pointer"
+            <select style="border:none;background:transparent;font:inherit;outline:none;cursor:pointer"
               onchange="setSort(this.value)">
               <option value="curated" ${state.sortMode==="curated"?"selected":""}>Curated order</option>
               <option value="name" ${state.sortMode==="name"?"selected":""}>Name A–Z</option>
@@ -759,43 +710,26 @@
 
       const meta = `
         <div class="metaRow">
-          <div class="muted">
-            <span class="countDot"></span>
-            ${arr.length} wines · section: ${esc(state.filterSection)}
-          </div>
+          <div class="muted"><span class="countDot"></span>${arr.length} wines · section: ${esc(state.filterSection)}</div>
           ${sortSel}
         </div>
       `;
 
-      const cards = `
-        <div class="grid">
-          ${arr.map(w => renderCard(w)).join("")}
-        </div>
-      `;
+      const cards = `<div class="grid">${arr.map(w => renderCard(w)).join("")}</div>`;
 
-      return `
-        ${filterChips}
-        ${meta}
-        ${cards}
-      `;
+      return `${filterChips}${meta}${cards}`;
     }
 
     function renderCard(w){
       const btg = money(w.btg_price);
       const bot = money(w.bottle_price);
 
-      // ВАЖНО: на карточке НЕ показываем pairing (только в модалке)
-      // ВАЖНО: убрали дубль “region,country” текстом — оставили это в чипах
-      const chips = [
-        w.section ? w.section : "",
-        w.country ? w.country : "",
-        w.region ? w.region : "",
-      ].filter(Boolean);
+      const chips = [w.section, w.country, w.region].filter(Boolean);
 
       const priceHtml = `
         <div class="prices">
-          ${btg ? `<div class="label">Glass</div><div class="val">${esc(btg)}</div>` : `<div class="label">Glass</div><div class="val">—</div>`}
-          ${bot ? `<div class="label" style="margin-top:6px;">Bottle</div><div class="val">${esc(bot)}</div>` : `<div class="label" style="margin-top:6px;">Bottle</div><div class="val">—</div>`}
+          <div class="label">Glass</div><div class="val">${esc(btg || "—")}</div>
+          <div class="label" style="margin-top:6px;">Bottle</div><div class="val">${esc(bot || "—")}</div>
         </div>
       `;
 
@@ -826,14 +760,12 @@
     }
 
     // =========================
-    // БЛОК 17 — РЕНДЕР: WINE LIST (две колонки)
+    // БЛОК 17 — РЕНДЕР: WINE LIST
     // =========================
     function renderWineList(){
-      // В списке не используем фильтры чипами — просто показываем структурно по section
       const bySectionOrder = ["Sparkling","White","Rosé","Red"];
       const all = [...state.wines];
 
-      // сортировка внутри секции по order и name
       all.sort((a,b) => {
         const ao = parseFloat(a.order || "9999");
         const bo = parseFloat(b.order || "9999");
@@ -852,17 +784,17 @@
         const rows = (grouped[s] || []).map(w => renderListRow(w)).join("");
         return `
           <div class="sectionTitle">${esc(s)}</div>
-          ${rows || `<div class="row" style="cursor:default;"><div class="rowLeft"><div class="rowName">—</div><p class="rowMeta muted2">No wines in this section</p></div><div class="rowRight"></div></div>`}
+          ${rows || `<div class="row" style="cursor:default;">
+            <div class="rowLeft"><div class="rowName">—</div><p class="rowMeta muted2">No wines in this section</p></div>
+            <div class="rowRight"></div>
+          </div>`}
         `;
       }).join("");
 
       return `
         <div class="listWrap">
           <div class="listHeader">
-            <div class="muted">
-              <span class="countDot"></span>
-              ${state.wines.length} wines · Wine List
-            </div>
+            <div class="muted"><span class="countDot"></span>${state.wines.length} wines · Wine List</div>
             <div class="muted2" style="font-size:13px;">Tap a line to open the wine card</div>
           </div>
           ${body}
@@ -874,7 +806,6 @@
       const btg = money(w.btg_price);
       const bot = money(w.bottle_price);
 
-      // Wine List: name + vintage + producer + region + country
       const leftMeta = [
         w.producer,
         [w.region, w.country].filter(Boolean).join(", ")
@@ -889,33 +820,23 @@
             <p class="rowMeta">${esc(leftMeta || "—")}</p>
           </div>
           <div class="rowRight">
-            <div>
-              <div class="pLab">Glass</div>
-              <div class="pVal">${esc(btg || "—")}</div>
-            </div>
-            <div style="margin-top:8px;">
-              <div class="pLab">Bottle</div>
-              <div class="pVal">${esc(bot || "—")}</div>
-            </div>
+            <div><div class="pLab">Glass</div><div class="pVal">${esc(btg || "—")}</div></div>
+            <div style="margin-top:8px;"><div class="pLab">Bottle</div><div class="pVal">${esc(bot || "—")}</div></div>
           </div>
         </div>
       `;
     }
 
     // =========================
-    // БЛОК 18 — МОДАЛКА: ОТКРЫТЬ/ЗАКРЫТЬ И РЕНДЕР ДЕТАЛЕЙ
+    // БЛОК 18 — МОДАЛКА
     // =========================
     const overlay = document.getElementById("overlay");
     const modalBody = document.getElementById("modalBody");
     const closeBtn = document.getElementById("closeBtn");
 
     closeBtn.addEventListener("click", closeModal);
-    overlay.addEventListener("click", (e) => {
-      if(e.target === overlay) closeModal();
-    });
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "Escape") closeModal();
-    });
+    overlay.addEventListener("click", (e) => { if(e.target === overlay) closeModal(); });
+    document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
 
     function openWine(id){
       const w = state.wines.find(x => x.id === id);
@@ -924,16 +845,8 @@
       const btg = money(w.btg_price);
       const bot = money(w.bottle_price);
 
-      // ВАЖНО: показываем pairing только здесь
-      // По твоему текущему запросу: World pairing позже можно отключить полностью (пока оставляю как отдельный блок, чтобы ты мог одним движением убрать)
       const ptPair = w.pairing_PeopleTalk || "";
-      const worldPair = w.pairing_World_Classic || "";
-
-      const chips = [
-        w.section ? w.section : "",
-        w.country ? w.country : "",
-        w.region ? w.region : "",
-      ].filter(Boolean);
+      const chips = [w.section, w.country, w.region].filter(Boolean);
 
       modalBody.innerHTML = `
         <div class="modalBottle">
@@ -954,10 +867,6 @@
 
           <div class="modalBlockTitle">PeopleTalk pairing</div>
           <p class="modalText">${esc(ptPair || "—")}</p>
-
-          <!-- Если решишь полностью убрать world pairing: просто удали этот блок ниже -->
-          <div class="modalBlockTitle">World classic pairing</div>
-          <p class="modalText">${esc(worldPair || "—")}</p>
 
           ${w.story_short ? `
             <div class="modalBlockTitle">Story</div>
@@ -981,12 +890,11 @@
     }
 
     // =========================
-    // БЛОК 19 — НАВИГАЦИЯ (HOME / LIST / GALLERY)
+    // БЛОК 19 — НАВИГАЦИЯ
     // =========================
     function goHome(){ state.view = "home"; render(); }
     function goList(){ state.view = "list"; render(); }
     function goGallery(){ state.view = "gallery"; render(); }
-
     function setSection(s){ state.filterSection = s; render(); }
     function setSort(v){ state.sortMode = v; render(); }
 
@@ -994,53 +902,28 @@
     // БЛОК 20 — ГЛАВНЫЙ RENDER()
     // =========================
     const app = document.getElementById("app");
-
     function render(){
       if(state.loading){
-        app.innerHTML = `
-          <div class="panel">
-            <div class="muted">Loading CSV…</div>
-          </div>
-        `;
+        app.innerHTML = `<div class="panel"><div class="muted">Loading CSV…</div></div>`;
         return;
       }
       if(state.error){
-        app.innerHTML = `
-          <div class="panel">
-            <div style="font-weight:700;">Error</div>
-            <div class="muted" style="margin-top:8px;">${esc(state.error)}</div>
-          </div>
-        `;
+        app.innerHTML = `<div class="panel"><div style="font-weight:700;">Error</div><div class="muted" style="margin-top:8px;">${esc(state.error)}</div></div>`;
         return;
       }
 
       const top = renderTopbar();
-
       let body = "";
       if(state.view === "home") body = renderHome();
       if(state.view === "list") body = renderWineList();
       if(state.view === "gallery") body = renderGallery();
 
-      app.innerHTML = `
-        ${top}
-        ${body}
-      `;
+      app.innerHTML = `${top}${body}`;
     }
 
     // =========================
     // БЛОК 21 — СТАРТ
     // =========================
-    // Подставляем полный base64 лого (не сокращённый)
-    (function injectLogo(){
-      // (это сделано так, чтобы код был “одним файлом” и не требовал ассеты)
-      const full = "${"__LOGO_FULL_BASE64__"}";
-      // Если по какой-то причине заменитель не сработал — оставим исходное значение
-      if(full && full.startsWith("/9j/")) {
-        window.LOGO_DATA_URL = "data:image/jpeg;base64," + full;
-      }
-    })();
-
-    // Глобальные функции (для onclick)
     window.goHome = goHome;
     window.goList = goList;
     window.goGallery = goGallery;
@@ -1049,27 +932,6 @@
     window.openWine = openWine;
 
     loadCSV();
-  </script>
-
-  <!-- =========================
-       БЛОК 22 — ВСТАВКА ПОЛНОГО BASE64 ЛОГО (автоматически)
-       ========================= -->
-  <script>
-    // Это место — чисто “технический трюк”, чтобы держать base64 лого полностью и не ломать читаемость выше.
-    // НЕ меняй здесь ничего, если не хочешь менять логотип.
-    window.__LOGO_FULL_BASE64__ =
-"/9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAA..."; // <- заменено ниже полностью
-  </script>
-
-  <script>
-    // === ПОДМЕНА: здесь реальный полный base64 твоей эмблемы (из присланного кружка) ===
-    // ВАЖНО: я вставляю полный base64 прямо здесь.
-    window.__LOGO_FULL_BASE64__ =
-"/9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAA...BASE64_WAS_TOO_LONG_FOR_INLINE_PLACEHOLDER...";
-    // Пояснение: в этом чате я не могу безопасно вставить 70k+ символов base64 без риска, что интерфейс обрежет строку.
-    // ПРОСТОЕ РЕШЕНИЕ (надежнее):
-    // 1) В GitHub рядом с index.html создай файл: assets/peopletalk-logo.jpg
-    // 2) В коде выше замени LOGO_DATA_URL на: "assets/peopletalk-logo.jpg"
   </script>
 </body>
 </html>
