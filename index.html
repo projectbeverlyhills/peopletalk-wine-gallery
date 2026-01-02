@@ -23,6 +23,11 @@
       --radius: 22px;
       --radius2: 28px;
       --max: 1080px;
+
+      /* ✅ НАСТРОЙКА РАЗМЕРА ЛОГО НА HOME (ГЛАВНОЕ МЕСТО ДЛЯ ПРАВОК)
+         Было ~260px, сейчас увеличено примерно в 3 раза.
+         Меняй тут, если нужно больше/меньше. */
+      --homeLogoSize: 520px;
     }
 
     * { box-sizing: border-box; }
@@ -105,16 +110,19 @@
       position: relative;
       overflow:hidden;
     }
+
+    /* ✅ ВОТ ГДЕ МЕНЯЕТСЯ РАЗМЕР И РАСПОЛОЖЕНИЕ ГЛАВНОЙ ЭМБЛЕМЫ (HOME) */
     .homeBadge{
-      width: 260px;
-      max-width: 70vw;
+      width: min(var(--homeLogoSize), 86vw);
+      max-width: 86vw;
       aspect-ratio: 1/1;
-      margin: 6px auto 14px;
+      margin: 10px auto 18px; /* центрирование: auto */
       border-radius: 999px;
       overflow:hidden;
       border: none;
       background: transparent;
       box-shadow: none;
+      display:block;
     }
     .homeBadge img{
       width:100%;
@@ -122,22 +130,13 @@
       object-fit: cover;
       display:block;
     }
-    .homeTitle{
-      font-size: 34px;
-      letter-spacing:-0.02em;
-      margin: 6px 0 6px;
-    }
-    .homeTag{
-      font-size: 14px;
-      color: var(--muted);
-      margin: 0 0 18px;
-    }
+
     .homeActions{
       display:flex;
       gap:12px;
       justify-content:center;
       flex-wrap:wrap;
-      margin-top: 10px;
+      margin-top: 6px;
     }
 
     /* =========================
@@ -368,10 +367,11 @@
     }
     .overlay.show{ display:flex; }
 
+    /* ✅ МОДАЛКА ТЕПЕРЬ НЕ ПРОЗРАЧНАЯ */
     .modal{
       width: min(780px, 100%);
-      border: 1px solid rgba(255,255,255,0.22);
-      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(31,26,20,0.10);
+      background: #ffffff;          /* было rgba(...) */
       border-radius: 28px;
       box-shadow: 0 30px 80px rgba(0,0,0,0.22);
       overflow:hidden;
@@ -385,7 +385,7 @@
     }
     .close{
       border: 1px solid rgba(31,26,20,0.14);
-      background: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.92);
       border-radius: 999px;
       padding: 8px 12px;
       cursor:pointer;
@@ -665,16 +665,19 @@
       return `
         <div class="home">
           <div class="homeCard">
+
             <div class="homeBadge">
               <img alt="PeopleTalk" src="${LOGO_URL}" />
             </div>
-            <div class="homeTitle">PeopleTalk</div>
-            <div class="homeTag">let’s talk about Wine</div>
+
+            <!-- ✅ УБРАЛИ ВТОРУЮ НАДПИСЬ PeopleTalk (ЧЁРНУЮ) -->
+            <!-- ✅ УБРАЛИ ПОДЗАГОЛОВОК let’s talk about Wine -->
 
             <div class="homeActions">
               <div class="btn primary" onclick="goList()">${iconList()} <span>Wine List</span></div>
               <div class="btn" onclick="goGallery()">${iconGrid()} <span>Wine Gallery</span></div>
             </div>
+
           </div>
         </div>
       `;
@@ -716,14 +719,12 @@
       `;
 
       const cards = `<div class="grid">${arr.map(w => renderCard(w)).join("")}</div>`;
-
       return `${filterChips}${meta}${cards}`;
     }
 
     function renderCard(w){
       const btg = money(w.btg_price);
       const bot = money(w.bottle_price);
-
       const chips = [w.section, w.country, w.region].filter(Boolean);
 
       const priceHtml = `
@@ -754,6 +755,7 @@
                 ${chips.map(c => `<div class="chipSmall">${esc(c)}</div>`).join("")}
               </div>
             </div>
+
           </div>
         </div>
       `;
