@@ -28,7 +28,12 @@
       --homeLogoSize: 520px;
 
       /* ✅ Wine List: ширины колонок цен (iPad-first) */
-      --priceColW: 86px; /* ширина одной колонки цены (Glass / Bottle) */
+      --priceColW: 86px;
+
+      /* ✅ ШРИФТЫ: максимум 3 “типа” (один шрифт + 3 веса) */
+      --fw-regular: 400;
+      --fw-semibold: 600;
+      --fw-bold: 700;
     }
 
     * { box-sizing: border-box; }
@@ -36,6 +41,7 @@
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-weight: var(--fw-regular);
       background: radial-gradient(1200px 700px at 20% 0%, #faf6f1 0%, var(--bg) 55%, #efe7df 100%);
       color: var(--text);
     }
@@ -74,6 +80,7 @@
       user-select:none;
       box-shadow: 0 10px 26px rgba(0,0,0,0.06);
       transition: transform .08s ease, background .15s ease;
+      font-weight: var(--fw-regular);
     }
     .btn:active{ transform: translateY(1px); }
     .btn.primary{ background: rgba(255,255,255,0.80); }
@@ -112,7 +119,6 @@
       overflow:hidden;
     }
 
-    /* ✅ Эмблема по центру */
     .homeBadge{
       width: min(var(--homeLogoSize), 86vw);
       max-width: 86vw;
@@ -159,6 +165,7 @@
       font-size: 14px;
       color: rgba(31,26,20,0.82);
       transition: background .15s ease, transform .08s ease;
+      font-weight: var(--fw-regular);
     }
     .chip.active{
       background: rgba(255,255,255,0.92);
@@ -202,7 +209,6 @@
       cursor:pointer;
     }
 
-    /* единый стандарт высоты карточки */
     .cardInner{
       display:grid;
       grid-template-columns: 128px 1fr;
@@ -211,7 +217,6 @@
       min-height: 168px;
     }
 
-    /* бутылка без рамки */
     .bottleBox{
       width: 128px;
       height: 168px;
@@ -235,17 +240,19 @@
       line-height: 1.12;
       letter-spacing:-0.01em;
       margin: 0 0 4px;
-      font-weight: 750;
+      font-weight: var(--fw-bold);
     }
     .producer{
       margin: 0 0 4px;
       font-size: 14px;
       color: var(--muted);
+      font-weight: var(--fw-regular);
     }
     .vintage{
       margin: 0 0 10px;
       font-size: 14px;
       color: var(--muted2);
+      font-weight: var(--fw-regular);
     }
     .chipsSmall{
       display:flex;
@@ -260,6 +267,7 @@
       padding: 6px 10px;
       font-size: 12px;
       color: rgba(31,26,20,0.72);
+      font-weight: var(--fw-regular);
     }
 
     .prices{
@@ -273,16 +281,16 @@
       color: var(--muted2);
       line-height: 1.2;
       margin-bottom: 2px;
+      font-weight: var(--fw-regular);
     }
     .prices .val{
       font-size: 18px;
-      font-weight: 800;
+      font-weight: var(--fw-bold);
       letter-spacing:-0.01em;
     }
 
     /* =========================
        БЛОК 5 — WINE LIST (NOVIKOV CLEAN)
-       две колонки: слева вина, справа цены (Glass/Bottle)
        ========================= */
     .listWrap{
       border: 1px solid var(--stroke);
@@ -300,7 +308,6 @@
       gap: 10px;
     }
 
-    /* Верхняя “табличная” шапка цен */
     .listColsHeader{
       display:grid;
       grid-template-columns: 1fr calc(var(--priceColW) * 2);
@@ -315,58 +322,70 @@
       letter-spacing: .10em;
       text-transform: uppercase;
       color: rgba(31,26,20,0.42);
+      font-weight: var(--fw-regular);
     }
     .listColsHeader .rightHead{
       display:grid;
       grid-template-columns: var(--priceColW) var(--priceColW);
-      column-gap: 0;
       justify-items:end;
       font-size: 12px;
       letter-spacing: .10em;
       text-transform: uppercase;
       color: rgba(31,26,20,0.48);
+      font-weight: var(--fw-regular);
+    }
+
+    /* ✅ Визуальное разделение типов: отдельный блок на каждый раздел */
+    .sectionBlock{
+      margin: 14px 14px 18px;
+      border: 1px solid rgba(31,26,20,0.08);
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(255,255,255,0.28);
     }
 
     .sectionTitle{
-      padding: 14px 16px 10px;
+      padding: 12px 14px;
       font-size: 12px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(31,26,20,0.56);
-      background: rgba(255,255,255,0.30);
-      border-top: 1px solid rgba(31,26,20,0.06);
+      background: rgba(255,255,255,0.35);
+      border-bottom: 1px solid rgba(31,26,20,0.06);
+      font-weight: var(--fw-regular);
     }
 
-    /* Одна строка списка (ровная сетка) */
+    /* ✅ Одна строка: всё в одну линию */
     .row{
       display:grid;
       grid-template-columns: 1fr calc(var(--priceColW) * 2);
       gap: 14px;
       align-items:center;
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-top: 1px solid rgba(31,26,20,0.06);
       cursor:pointer;
-      background: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.20);
     }
-    .row:hover{ background: rgba(255,255,255,0.34); }
+    .row:first-of-type{ border-top:none; }
+    .row:hover{ background: rgba(255,255,255,0.32); }
 
-    .rowLeft{ min-width: 0; }
-    .rowName{
-      font-size: 15px;
-      font-weight: 640;            /* тоньше */
-      letter-spacing:-0.01em;
+    .rowLeft{
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .rowOneLine{
+      font-size: 14.5px;
       line-height: 1.22;
-      margin: 0 0 3px;
-    }
-    .rowMeta{
-      font-size: 12.5px;
-      color: rgba(31,26,20,0.58);
-      line-height: 1.35;
       margin: 0;
-      font-weight: 420;
+      font-weight: var(--fw-regular); /* один стиль */
+      color: rgba(31,26,20,0.92);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Правая часть — две колонки цен, идеально ровно */
     .rowRight{
       display:grid;
       grid-template-columns: var(--priceColW) var(--priceColW);
@@ -375,23 +394,21 @@
       font-variant-numeric: tabular-nums;
     }
     .pVal{
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14.5px;
+      font-weight: var(--fw-semibold);
       line-height: 1.2;
       color: rgba(31,26,20,0.92);
     }
     .pVal.mutedPrice{
-      color: rgba(31,26,20,0.38);
-      font-weight: 650;
+      color: rgba(31,26,20,0.35);
+      font-weight: var(--fw-regular);
     }
 
-    /* iPad типографика/отступы (чтение на расстоянии) */
     @media (min-width: 820px){
       .wrap{ padding: 30px 22px 80px; }
-      .row{ padding: 16px 18px; }
-      .rowName{ font-size: 16px; }
-      .rowMeta{ font-size: 13px; }
-      .pVal{ font-size: 16px; }
+      .row{ padding: 13px 16px; }
+      .rowOneLine{ font-size: 15.5px; }
+      .pVal{ font-size: 15.5px; }
     }
 
     /* =========================
@@ -409,7 +426,6 @@
     }
     .overlay.show{ display:flex; }
 
-    /* модалка НЕ прозрачная */
     .modal{
       width: min(780px, 100%);
       border: 1px solid rgba(31,26,20,0.10);
@@ -433,6 +449,7 @@
       cursor:pointer;
       user-select:none;
       font-size: 14px;
+      font-weight: var(--fw-regular);
     }
 
     .modalBody{
@@ -446,7 +463,6 @@
       .modalBody{ grid-template-columns: 1fr; }
     }
 
-    /* бутылка больше, но не гигант */
     .modalBottle{
       width: 210px;
       height: 320px;
@@ -467,13 +483,13 @@
 
     .modalTitle{
       font-size: 22px;
-      font-weight: 820;
+      font-weight: var(--fw-bold);
       margin: 0 0 4px;
       letter-spacing:-0.02em;
       line-height:1.12;
     }
-    .modalProducer{ margin: 0 0 2px; color: var(--muted); }
-    .modalVintage{ margin: 0 0 10px; color: var(--muted2); }
+    .modalProducer{ margin: 0 0 2px; color: var(--muted); font-weight: var(--fw-regular); }
+    .modalVintage{ margin: 0 0 10px; color: var(--muted2); font-weight: var(--fw-regular); }
 
     .modalBlockTitle{
       font-size: 12px;
@@ -481,6 +497,7 @@
       text-transform: uppercase;
       color: rgba(31,26,20,0.55);
       margin: 14px 0 6px;
+      font-weight: var(--fw-regular);
     }
     .modalText{
       margin: 0;
@@ -488,6 +505,7 @@
       line-height: 1.45;
       font-size: 14px;
       white-space: pre-wrap;
+      font-weight: var(--fw-regular);
     }
   </style>
 </head>
@@ -517,10 +535,7 @@
        БЛОК 9 — JS: КОНФИГ / CSV / ПАРСИНГ
        ========================= -->
   <script>
-    // === CSV ссылка (ЕДИНСТВЕННЫЙ источник данных) ===
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc7yfiUN3Wgz9vCWrKVJksRoQ6EFYzDq6P40HaN1v2hmhk0nKicji-UZYZyd7LF2-lcSSU264vG53f/pub?gid=178668445&single=true&output=csv";
-
-    // === Лого PeopleTalk (файл в репозитории) ===
     const LOGO_URL = "assets/peopletalk-logo.jpg";
   </script>
 
@@ -547,8 +562,14 @@
       if(num === "" || num === "-") return "";
       return (t.includes("$") ? t : `$${num}`);
     }
+    function priceNum(v){
+      // для сортировки: "$15" -> 15, "" -> Infinity
+      const t = String(v ?? "").trim();
+      if(!t || t === "-" ) return Number.POSITIVE_INFINITY;
+      const n = parseFloat(t.replace("$","").trim());
+      return Number.isFinite(n) ? n : Number.POSITIVE_INFINITY;
+    }
 
-    // CSV parser (поддержка кавычек)
     function parseCSV(text){
       const rows = [];
       let i=0, field="", row=[], inQ=false;
@@ -639,7 +660,7 @@
     }
 
     // =========================
-    // БЛОК 13 — СОРТИРОВКА / ФИЛЬТРЫ
+    // БЛОК 13 — СОРТИРОВКА / ФИЛЬТРЫ (GALLERY)
     // =========================
     function getFiltered(){
       let arr = [...state.wines];
@@ -711,8 +732,6 @@
             <div class="homeBadge">
               <img alt="PeopleTalk" src="${LOGO_URL}" />
             </div>
-
-            <!-- Убраны: чёрная надпись PeopleTalk и let’s talk about Wine -->
 
             <div class="homeActions">
               <div class="btn primary" onclick="goList()">${iconList()} <span>Wine List</span></div>
@@ -795,7 +814,6 @@
                 ${chips.map(c => `<div class="chipSmall">${esc(c)}</div>`).join("")}
               </div>
             </div>
-
           </div>
         </div>
       `;
@@ -803,18 +821,15 @@
 
     // =========================
     // БЛОК 17 — WINE LIST (NOVIKOV CLEAN)
+    // ✅ сортировка по цене бокала (дешевое -> дорогое)
+    // ✅ секции визуально разделены
+    // ✅ каждая строка в одну линию
     // =========================
     function renderWineList(){
       const bySectionOrder = ["Sparkling","White","Rosé","Red"];
       const all = [...state.wines];
 
-      all.sort((a,b) => {
-        const ao = parseFloat(a.order || "9999");
-        const bo = parseFloat(b.order || "9999");
-        if(ao !== bo) return ao - bo;
-        return (a.name || "").localeCompare(b.name || "");
-      });
-
+      // Группировка по секциям
       const grouped = {};
       for(const s of bySectionOrder) grouped[s] = [];
       for(const w of all){
@@ -822,17 +837,34 @@
         if(grouped[s]) grouped[s].push(w);
       }
 
+      // Сортировка ВНУТРИ секции по цене бокала (Glass), потом Bottle
+      for(const s of bySectionOrder){
+        grouped[s].sort((a,b) => {
+          const ap = priceNum(a.btg_price);
+          const bp = priceNum(b.btg_price);
+          if(ap !== bp) return ap - bp;
+
+          const ab = priceNum(a.bottle_price);
+          const bb = priceNum(b.bottle_price);
+          if(ab !== bb) return ab - bb;
+
+          // запасной вариант — по имени
+          const an = `${a.producer||""} ${a.name||""}`.trim();
+          const bn = `${b.producer||""} ${b.name||""}`.trim();
+          return an.localeCompare(bn);
+        });
+      }
+
       const body = bySectionOrder.map(s => {
         const rows = (grouped[s] || []).map(w => renderListRow(w)).join("");
         return `
-          <div class="sectionTitle">${esc(s)}</div>
-          ${rows || `<div class="row" style="cursor:default;">
-            <div class="rowLeft">
-              <div class="rowName">—</div>
-              <p class="rowMeta muted2">No wines in this section</p>
-            </div>
-            <div class="rowRight"></div>
-          </div>`}
+          <div class="sectionBlock">
+            <div class="sectionTitle">${esc(s)}</div>
+            ${rows || `<div class="row" style="cursor:default;">
+              <div class="rowLeft"><p class="rowOneLine muted2">—</p></div>
+              <div class="rowRight"></div>
+            </div>`}
+          </div>
         `;
       }).join("");
 
@@ -860,21 +892,30 @@
       const btg = money(w.btg_price);
       const bot = money(w.bottle_price);
 
-      const leftMeta = [
-        w.producer,
-        [w.region, w.country].filter(Boolean).join(", ")
-      ].filter(Boolean).join(" · ");
-
+      // ✅ одна строка слева: Producer — Name Vintage · Grape · Region, Country
+      const producer = w.producer ? w.producer : "";
+      const name = w.name ? w.name : "";
       const vintage = w.vintage ? ` ${w.vintage}` : "";
+      const grape = w.grape ? w.grape : "";
+      const loc = [w.region, w.country].filter(Boolean).join(", ");
+
+      const leftTextParts = [];
+      const head = [producer, name].filter(Boolean).join(" — ").trim();
+      const headWithVintage = `${head}${vintage}`.trim();
+      if(headWithVintage) leftTextParts.push(headWithVintage);
+
+      if(grape) leftTextParts.push(grape);
+      if(loc) leftTextParts.push(loc);
+
+      const leftText = leftTextParts.join(" · ") || "—";
 
       const btgOut = btg || "—";
       const botOut = bot || "—";
 
       return `
         <div class="row" onclick="openWine('${esc(w.id)}')">
-          <div class="rowLeft">
-            <div class="rowName">${esc(w.name)}${esc(vintage)}</div>
-            <p class="rowMeta">${esc(leftMeta || "—")}</p>
+          <div class="rowLeft" title="${esc(leftText)}">
+            <p class="rowOneLine">${esc(leftText)}</p>
           </div>
 
           <div class="rowRight">
